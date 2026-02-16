@@ -1,0 +1,81 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-the-add-money-page-frontend-src-pages-addmoneypage-tsx-to-display-the-a7j-topup-personal-payment-numbers-for-each-payment-method-bkash-personal-01868226859-nagad-personal-01784377956-the-numbers-must-be-clearly-visible-in-the-ui-english-text-associated-with-their-respective-payment-method-and-easy-to-copy-read",
+      "featureTitle": "Update the Add Money page (frontend/src/pages/AddMoneyPage.tsx) to display the A7J TOPUP personal payment numbers for each payment method: bKash Personal: 01868226859; Nagad Personal: 01784377956. The numbers must be clearly visible in the UI (English text), associated with their respective payment method, and easy to copy/read.",
+      "files": [
+        "frontend/src/pages/AddMoneyPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-prominent-instruction-card-box-on-the-add-money-page-with-the-exact-english-content-provided-by-the-user-title-how-to-add-money-steps-1-send-money-to-the-chosen-number-bkash-or-nagad-2-enter-the-amount-3-after-payment-enter-transaction-id-4-click-submit-5-admin-will-verify-and-add-balance-and-an-important-notice-section-with-bullet-points-balance-will-be-added-only-after-admin-approval-and-do-not-send-money-without-submitting-transaction-id",
+      "featureTitle": "Add a prominent instruction card/box on the Add Money page with the exact English content provided by the user: Title 'How to Add Money'; Steps: (1) 'Send money to the chosen number (bKash or Nagad)' (2) 'Enter the amount' (3) 'After payment, enter Transaction ID' (4) 'Click Submit' (5) 'Admin will verify and add balance'; and an 'Important Notice' section with bullet points: 'Balance will be added only after admin approval' and 'Do not send money without submitting transaction ID'.",
+      "files": [
+        "frontend/src/pages/AddMoneyPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-adjust-the-add-money-page-layout-and-styling-to-match-the-requested-design-white-page-background-clean-professional-card-layout-purple-buttons-payment-icons-for-bkash-and-nagad-next-to-their-method-display-and-soft-shadows-with-rounded-corners-keep-existing-add-money-submission-flow-and-transaction-history-functionality-intact",
+      "featureTitle": "Adjust the Add Money page layout and styling to match the requested design: white page background, clean professional card layout, purple buttons, payment icons for bKash and Nagad next to their method display, and soft shadows with rounded corners. Keep existing Add Money submission flow and transaction history functionality intact.",
+      "files": [
+        "frontend/src/pages/AddMoneyPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-the-required-payment-method-icon-assets-to-the-frontend-static-assets-directory-and-render-them-on-the-add-money-page-without-routing-images-through-the-backend-serve-from-frontend-public-assets-generated",
+      "featureTitle": "Add the required payment method icon assets to the frontend static assets directory and render them on the Add Money page without routing images through the backend (serve from frontend/public/assets/generated).",
+      "files": [
+        "frontend/src/pages/AddMoneyPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

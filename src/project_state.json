@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Add Money page update for A7J TOPUP: show personal payment numbers for bKash/Nagad and a clear instructions + notice box with clean white fintech UI styling.",
+  "architectural_notes": [
+    "Add Money page UI: white background, clean professional card layout, soft shadow, rounded corners, purple buttons, bKash/Nagad payment icons.",
+    "Add Money flow instructions: send money to chosen number → enter amount → enter transaction ID → submit → admin verifies and adds balance; show notice that balance is added only after admin approval and not to send money without submitting transaction ID."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- bKash payment method icon, flat vector-style, transparent background (bkash-icon.dim_128x128.png)\n- Nagad payment method icon, flat vector-style, transparent background (nagad-icon.dim_128x128.png)",
+  "existing_features": [
+    {
+      "id": "feature-update-the-add-money-page-frontend-src-pages-addmoneypage-tsx-to-display-the-a7j-topup-personal-payment-numbers-for-each-payment-method-bkash-personal-01868226859-nagad-personal-01784377956-the-numbers-must-be-clearly-visible-in-the-ui-english-text-associated-with-their-respective-payment-method-and-easy-to-copy-read",
+      "title": "Update the Add Money page (frontend/src/pages/AddMoneyPage.tsx) to display the A7J TOPUP personal payment numbers for each payment method: bKash Personal: 01868226859; Nagad Personal: 01784377956. The numbers must be clearly visible in the UI (English text), associated with their respective payment method, and easy to copy/read.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-prominent-instruction-card-box-on-the-add-money-page-with-the-exact-english-content-provided-by-the-user-title-how-to-add-money-steps-1-send-money-to-the-chosen-number-bkash-or-nagad-2-enter-the-amount-3-after-payment-enter-transaction-id-4-click-submit-5-admin-will-verify-and-add-balance-and-an-important-notice-section-with-bullet-points-balance-will-be-added-only-after-admin-approval-and-do-not-send-money-without-submitting-transaction-id",
+      "title": "Add a prominent instruction card/box on the Add Money page with the exact English content provided by the user: Title 'How to Add Money'; Steps: (1) 'Send money to the chosen number (bKash or Nagad)' (2) 'Enter the amount' (3) 'After payment, enter Transaction ID' (4) 'Click Submit' (5) 'Admin will verify and add balance'; and an 'Important Notice' section with bullet points: 'Balance will be added only after admin approval' and 'Do not send money without submitting transaction ID'.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-adjust-the-add-money-page-layout-and-styling-to-match-the-requested-design-white-page-background-clean-professional-card-layout-purple-buttons-payment-icons-for-bkash-and-nagad-next-to-their-method-display-and-soft-shadows-with-rounded-corners-keep-existing-add-money-submission-flow-and-transaction-history-functionality-intact",
+      "title": "Adjust the Add Money page layout and styling to match the requested design: white page background, clean professional card layout, purple buttons, payment icons for bKash and Nagad next to their method display, and soft shadows with rounded corners. Keep existing Add Money submission flow and transaction history functionality intact.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-required-payment-method-icon-assets-to-the-frontend-static-assets-directory-and-render-them-on-the-add-money-page-without-routing-images-through-the-backend-serve-from-frontend-public-assets-generated",
+      "title": "Add the required payment method icon assets to the frontend static assets directory and render them on the Add Money page without routing images through the backend (serve from frontend/public/assets/generated).",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Update Add Money page for A7J TOPUP to display bKash/Nagad personal numbers, add 'How to Add Money' instruction box + Important Notice, and apply clean white card UI with purple buttons and payment icons.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "A7J TOPUP",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

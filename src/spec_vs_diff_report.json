@@ -1,0 +1,38 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T09:45:27.359Z",
+  "summary": "Diff updates AddMoneyPage.tsx with new UI elements (instructions card, copy-to-clipboard/toasts, styling). However, the required static icon image assets are not added in the diff, and some requested instruction content/icons cannot be fully verified due to truncation.",
+  "missing_requirements": [
+    {
+      "id": "REQ-12",
+      "requirement": "Add the required payment method icon assets under frontend/public/assets/generated with the exact filenames bkash-icon.dim_128x128.png and nagad-icon.dim_128x128.png, and render them on the Add Money page via static asset paths (no backend routing).",
+      "reason": "The diff shows 'Added: 0' with no new files, and there is no evidence of the required icon files being added under frontend/public/assets/generated.",
+      "evidence": [
+        "file-diff summary: Added: 0, Modified: 3, Removed: 0"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Copy-to-clipboard for payment numbers with success toast notifications and a temporary 'copied' state.",
+      "reason": "The BuildRequest requires numbers to be visible and easy to copy/read, but does not request implementing clipboard copy buttons/toast notifications/state management.",
+      "evidence": [
+        "frontend/src/pages/AddMoneyPage.tsx (handleCopyNumber uses navigator.clipboard.writeText, toast.success, copiedNumber state)"
+      ]
+    },
+    {
+      "description": "Client-side Toaster integration on the Add Money page.",
+      "reason": "The BuildRequest does not request adding toast infrastructure/UI feedback components; it only specifies layout/content/icon requirements and not notification UI.",
+      "evidence": [
+        "frontend/src/pages/AddMoneyPage.tsx (imports Toaster from '@/components/ui/sonner' and renders <Toaster />)"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/pages/AddMoneyPage.tsx",
+    "project_state.json"
+  ]
+}

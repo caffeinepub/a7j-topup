@@ -1,0 +1,109 @@
+{
+  "kind": "build_request",
+  "title": "Update Add Money page with personal payment numbers, instruction box, and payment icons",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "text": "Update the Add Money page (frontend/src/pages/AddMoneyPage.tsx) to display the A7J TOPUP personal payment numbers for each payment method: bKash Personal: 01868226859; Nagad Personal: 01784377956. The numbers must be clearly visible in the UI (English text), associated with their respective payment method, and easy to copy/read.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-1"
+        ],
+        "quotes": [
+          "Update the Add Money page for A7J TOPUP with personal payment numbers.\n\nPayment Methods:\n- bKash Personal: 01868226859\n- Nagad Personal: 01784377956"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Add Money page, both payment methods are shown with their exact numbers: 01868226859 (bKash Personal) and 01784377956 (Nagad Personal).",
+        "The payment numbers are rendered as plain text (not images) and remain readable on mobile and desktop.",
+        "All user-facing labels for these sections are in English."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a prominent instruction card/box on the Add Money page with the exact English content provided by the user: Title 'How to Add Money'; Steps: (1) 'Send money to the chosen number (bKash or Nagad)' (2) 'Enter the amount' (3) 'After payment, enter Transaction ID' (4) 'Click Submit' (5) 'Admin will verify and add balance'; and an 'Important Notice' section with bullet points: 'Balance will be added only after admin approval' and 'Do not send money without submitting transaction ID'.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-1"
+        ],
+        "quotes": [
+          "Add a clear instruction box:\n\nTitle: How to Add Money\n\nSteps:\n1. Send money to the chosen number (bKash or Nagad)\n2. Enter the amount\n3. After payment, enter Transaction ID\n4. Click Submit\n5. Admin will verify and add balance\n\nImportant Notice:\n- Balance will be added only after admin approval\n- Do not send money without submitting transaction ID"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Add Money page includes an instruction box/card titled 'How to Add Money'.",
+        "The instruction box shows the 5 steps in the same order and wording as provided.",
+        "The instruction box includes an 'Important Notice' section with the 2 bullet points exactly as provided.",
+        "All instruction/notice text is in English and is visually distinct from the form (e.g., separated card with spacing)."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Adjust the Add Money page layout and styling to match the requested design: white page background, clean professional card layout, purple buttons, payment icons for bKash and Nagad next to their method display, and soft shadows with rounded corners. Keep existing Add Money submission flow and transaction history functionality intact.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-1"
+        ],
+        "quotes": [
+          "Design:\n- White background\n- Clean professional card layout\n- Purple buttons\n- Payment icons for bKash and Nagad\n- Soft shadow, rounded corners"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Add Money page background is white and the primary call-to-action button remains purple-styled (consistent with existing purple button utilities).",
+        "Cards on the page have rounded corners and soft shadows (consistent with existing 'shadow-soft' usage).",
+        "bKash and Nagad each display an icon alongside the method name/number (icons load from static frontend assets).",
+        "No changes break submitting a transaction or viewing transaction history (form still validates required fields and submits via existing mutation)."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Add the required payment method icon assets to the frontend static assets directory and render them on the Add Money page without routing images through the backend (serve from frontend/public/assets/generated).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "user-1"
+        ],
+        "quotes": [
+          "Payment icons for bKash and Nagad"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Two icon files exist under frontend/public/assets/generated with the exact filenames specified in imageRequirements.required.",
+        "The Add Money page renders the icons via standard <img> usage (or equivalent) referencing the static asset paths.",
+        "Icons display crisply at typical UI sizes (e.g., ~24–40px) and do not distort their aspect ratio."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose existing UI components instead).",
+    "Backend must remain single-actor; no backend changes are required for this request.",
+    "Use English for all user-facing text added or modified on the Add Money page.",
+    "Do not remove or break existing Add Money form submission, balance display, or transaction history features."
+  ],
+  "nonGoals": [
+    "Do not add new payment methods beyond bKash and Nagad.",
+    "Do not implement automatic payment verification; admin approval flow remains unchanged.",
+    "Do not add SMS/email/push notifications or any third-party integrations."
+  ],
+  "imageRequirements": {
+    "required": [
+      "bKash payment method icon, flat vector-style, transparent background (bkash-icon.dim_128x128.png)",
+      "Nagad payment method icon, flat vector-style, transparent background (nagad-icon.dim_128x128.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

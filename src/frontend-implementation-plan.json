@@ -1,0 +1,83 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add Money page: personal payment numbers, instruction card, and payment icons",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "summary": "Show clearly readable A7J TOPUP personal payment numbers for bKash and Nagad on the Add Money page, with copy-friendly presentation in English.",
+      "acceptanceCriteria": [
+        "On the Add Money page, both payment methods are shown with their exact numbers: 01868226859 (bKash Personal) and 01784377956 (Nagad Personal).",
+        "The payment numbers are rendered as plain text (not images) and remain readable on mobile and desktop.",
+        "All user-facing labels for these sections are in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "operation": "modify",
+          "description": "Add a dedicated 'Payment Numbers' section above the form that displays 'bKash Personal: 01868226859' and 'Nagad Personal: 01784377956' as plain text with clear typography and an optional copy-to-clipboard affordance (keeping labels in English). Use existing shadcn-ui Card layout for readability and consistency; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add a prominent instruction card on the Add Money page with the exact provided English title, steps, and important notice bullets.",
+      "acceptanceCriteria": [
+        "The Add Money page includes an instruction box/card titled 'How to Add Money'.",
+        "The instruction box shows the 5 steps in the same order and wording as provided.",
+        "The instruction box includes an 'Important Notice' section with the 2 bullet points exactly as provided.",
+        "All instruction/notice text is in English and is visually distinct from the form (e.g., separated card with spacing)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "operation": "modify",
+          "description": "Insert a prominent instruction Card titled 'How to Add Money' containing the exact step list and 'Important Notice' bullet list text provided in the BuildRequest, visually separated from the form via spacing and card styling. Use shadcn-ui Card primitives to keep a clean, professional layout; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Refine Add Money page layout/styling to match the requested white background, professional cards, purple buttons, and method icons while preserving existing submission and history behavior.",
+      "acceptanceCriteria": [
+        "The Add Money page background is white and the primary call-to-action button remains purple-styled (consistent with existing purple button utilities).",
+        "Cards on the page have rounded corners and soft shadows (consistent with existing 'shadow-soft' usage).",
+        "bKash and Nagad each display an icon alongside the method name/number (icons load from static frontend assets).",
+        "No changes break submitting a transaction or viewing transaction history (form still validates required fields and submits via existing mutation)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "operation": "modify",
+          "description": "Adjust layout to a clean card-based structure on a white background: keep existing balance card, keep the form and transaction history functional, and add icon+method presentation for bKash/Nagad near the displayed numbers/method selection. Preserve existing mutation/validation logic and transaction table rendering; use existing Tailwind utilities (e.g., btn-purple-gradient, shadow-soft, rounded corners) and shadcn-ui components already in the page; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Add and use static payment icon assets for bKash and Nagad under frontend/public/assets/generated and render them on the Add Money page.",
+      "acceptanceCriteria": [
+        "Two icon files exist under frontend/public/assets/generated with the exact filenames specified in imageRequirements.required.",
+        "The Add Money page renders the icons via standard <img> usage (or equivalent) referencing the static asset paths.",
+        "Icons display crisply at typical UI sizes (e.g., ~24–40px) and do not distort their aspect ratio."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/bkash-icon.dim_128x128.png",
+          "operation": "create",
+          "description": "Add the generated static icon asset for bKash (transparent background) at the exact required path and filename so it can be served directly by the frontend."
+        },
+        {
+          "path": "frontend/public/assets/generated/nagad-icon.dim_128x128.png",
+          "operation": "create",
+          "description": "Add the generated static icon asset for Nagad (transparent background) at the exact required path and filename so it can be served directly by the frontend."
+        },
+        {
+          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "operation": "modify",
+          "description": "Render the payment method icons via static asset references using standard image rendering (e.g., <img>) alongside each method display, ensuring consistent sizing and preserving aspect ratio for frontend/public/assets/generated/bkash-icon.dim_128x128.png and frontend/public/assets/generated/nagad-icon.dim_128x128.png."
+        }
+      ]
+    }
+  ]
+}
