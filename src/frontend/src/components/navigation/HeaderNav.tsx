@@ -3,10 +3,11 @@ import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, User, LogOut, LayoutDashboard, Shield } from 'lucide-react';
+import { Menu, User, LogOut, LayoutDashboard, Shield, Wallet } from 'lucide-react';
 import { useState } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useGetCallerUserRole } from '../../hooks/useQueries';
+import { useGetCallerBalance } from '../../hooks/useWallet';
 
 export default function HeaderNav() {
   const { identity, clear, login, loginStatus } = useInternetIdentity();
@@ -15,6 +16,7 @@ export default function HeaderNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAuthenticated = !!identity;
   const { data: userRole } = useGetCallerUserRole();
+  const { data: walletBalance } = useGetCallerBalance();
   const isAdmin = userRole === 'admin';
 
   const handleAuth = async () => {
@@ -29,9 +31,10 @@ export default function HeaderNav() {
 
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/topup', label: 'Topup' },
     { to: '/add-money', label: 'Add Money', authRequired: true },
-    { to: '/contact-us', label: 'Contact Us' },
+    { to: '/buy-points', label: 'Buy Points', authRequired: true },
+    { to: '/buy-diamonds', label: 'Topup Diamonds', authRequired: true },
+    { to: '/ad-rewards', label: 'Earn Points', authRequired: true },
   ];
 
   const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
@@ -65,9 +68,9 @@ export default function HeaderNav() {
             className="h-10 w-10"
           />
           <div className="flex flex-col">
-            <span className="text-xl font-bold text-gradient-purple">A7J TOPUP</span>
+            <span className="text-xl font-bold text-primary">A7J TOPUP</span>
             <span className="text-xs text-muted-foreground hidden sm:block">
-              Fast & Secure Gaming Topup Service
+              Professional Top-Up Service
             </span>
           </div>
         </Link>
@@ -78,7 +81,15 @@ export default function HeaderNav() {
         </nav>
 
         {/* Auth Button / User Menu */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {isAuthenticated && walletBalance !== undefined && (
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg border border-primary/20">
+              <Wallet className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">
+                ৳{Number(walletBalance).toLocaleString()}
+              </span>
+            </div>
+          )}
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -92,10 +103,13 @@ export default function HeaderNav() {
                   Dashboard
                 </DropdownMenuItem>
                 {isAdmin && (
-                  <DropdownMenuItem onClick={() => navigate({ to: '/admin' })}>
-                    <Shield className="mr-2 h-4 w-4" />
-                    Admin Panel
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate({ to: '/admin' })}>
+                      <Shield className="mr-2 h-4 w-4" />
+                      Admin Panel
+                    </DropdownMenuItem>
+                  </>
                 )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleAuth}>
@@ -108,7 +122,7 @@ export default function HeaderNav() {
             <Button
               onClick={handleAuth}
               disabled={loginStatus === 'logging-in'}
-              className="btn-purple-gradient hidden md:flex"
+              className="hidden md:flex bg-primary hover:bg-primary/90 text-white"
             >
               {loginStatus === 'logging-in' ? 'Logging in...' : 'Login'}
             </Button>
@@ -123,6 +137,14 @@ export default function HeaderNav() {
             </SheetTrigger>
             <SheetContent side="right" className="w-64 bg-white">
               <nav className="flex flex-col gap-4 mt-8">
+                {isAuthenticated && walletBalance !== undefined && (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg border border-primary/20 mb-2">
+                    <Wallet className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-semibold text-primary">
+                      ৳{Number(walletBalance).toLocaleString()}
+                    </span>
+                  </div>
+                )}
                 <NavLinks mobile />
                 {isAuthenticated && (
                   <>
@@ -150,7 +172,7 @@ export default function HeaderNav() {
                     setMobileOpen(false);
                   }}
                   disabled={loginStatus === 'logging-in'}
-                  className="btn-purple-gradient mt-4"
+                  className="bg-primary hover:bg-primary/90 text-white mt-4"
                 >
                   {isAuthenticated ? 'Logout' : 'Login'}
                 </Button>

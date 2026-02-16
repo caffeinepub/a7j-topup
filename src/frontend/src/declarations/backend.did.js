@@ -13,21 +13,48 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
-export const OrderStatus = IDL.Variant({
-  'pending' : IDL.Null,
-  'delivered' : IDL.Null,
-  'processing' : IDL.Null,
-  'failed' : IDL.Null,
+export const AdminDashboard = IDL.Record({
+  'totalAdProfit' : IDL.Nat64,
+  'totalDiamonds' : IDL.Nat64,
+  'totalUsers' : IDL.Nat,
+  'totalPoints' : IDL.Int,
+  'totalRevenue' : IDL.Nat64,
 });
 export const Time = IDL.Int;
-export const ProductOrder = IDL.Record({
-  'id' : IDL.Nat32,
-  'status' : OrderStatus,
+export const DiamondPurchase = IDL.Record({
+  'id' : IDL.Text,
+  'packageName' : IDL.Text,
   'createdAt' : Time,
   'user' : IDL.Principal,
-  'productId' : IDL.Nat32,
-  'amount' : IDL.Nat64,
-  'isAutoDelivery' : IDL.Bool,
+  'diamondsAwarded' : IDL.Nat64,
+  'pointsDeducted' : IDL.Nat64,
+});
+export const PointsPurchaseStatus = IDL.Variant({
+  'pending' : IDL.Null,
+  'approved' : IDL.Null,
+  'rejected' : IDL.Null,
+});
+export const PointsPurchaseRequest = IDL.Record({
+  'id' : IDL.Text,
+  'status' : PointsPurchaseStatus,
+  'createdAt' : Time,
+  'user' : IDL.Principal,
+  'amount' : IDL.Int,
+  'bdtAmount' : IDL.Nat64,
+});
+export const PointsTransactionType = IDL.Variant({
+  'adReward' : IDL.Null,
+  'adminAdjustment' : IDL.Null,
+  'spend' : IDL.Null,
+  'purchase' : IDL.Null,
+});
+export const PointsTransaction = IDL.Record({
+  'id' : IDL.Text,
+  'transactionType' : PointsTransactionType,
+  'metadata' : IDL.Text,
+  'createdAt' : Time,
+  'user' : IDL.Principal,
+  'amount' : IDL.Int,
 });
 export const TransactionStatus = IDL.Variant({
   'pending' : IDL.Null,
@@ -52,6 +79,11 @@ export const UserProfile = IDL.Record({
   'email' : IDL.Text,
   'phone' : IDL.Text,
 });
+export const ConversionSettings = IDL.Record({
+  'pointsToDiamondsRate' : IDL.Nat64,
+  'diamondsPerPackage' : IDL.Nat64,
+  'bdtToPointsRate' : IDL.Nat64,
+});
 export const Product = IDL.Record({
   'id' : IDL.Nat32,
   'name' : IDL.Text,
@@ -62,45 +94,85 @@ export const Product = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'addProduct' : IDL.Func([IDL.Text, IDL.Nat64, IDL.Bool], [IDL.Nat32], []),
+  'approvePointsPurchaseRequest' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'approveWalletTopUpTransaction' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'createOrder' : IDL.Func([IDL.Nat32], [IDL.Nat32], []),
+  'claimAdReward' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'deleteProduct' : IDL.Func([IDL.Nat32], [], []),
-  'getAllOrdersSortedByTime' : IDL.Func([], [IDL.Vec(ProductOrder)], ['query']),
+  'getAdRewardsAnalytics' : IDL.Func(
+      [],
+      [IDL.Record({ 'totalProfit' : IDL.Nat64, 'totalAdRewards' : IDL.Nat })],
+      ['query'],
+    ),
+  'getAdminDashboard' : IDL.Func([], [AdminDashboard], ['query']),
+  'getAllDiamondPurchases' : IDL.Func(
+      [],
+      [IDL.Vec(DiamondPurchase)],
+      ['query'],
+    ),
+  'getAllPointsPurchaseRequests' : IDL.Func(
+      [],
+      [IDL.Vec(PointsPurchaseRequest)],
+      ['query'],
+    ),
+  'getAllPointsTransactions' : IDL.Func(
+      [],
+      [IDL.Vec(PointsTransaction)],
+      ['query'],
+    ),
   'getAllWalletTopUpTransactions' : IDL.Func(
       [],
       [IDL.Vec(WalletTopUpTransaction)],
       ['query'],
     ),
   'getCallerBalance' : IDL.Func([], [IDL.Nat64], ['query']),
-  'getCallerOrders' : IDL.Func([], [IDL.Vec(ProductOrder)], ['query']),
+  'getCallerDailyAdCount' : IDL.Func([], [IDL.Nat], ['query']),
+  'getCallerDiamondPurchases' : IDL.Func(
+      [],
+      [IDL.Vec(DiamondPurchase)],
+      ['query'],
+    ),
+  'getCallerPointsBalance' : IDL.Func([], [IDL.Int], ['query']),
+  'getCallerPointsPurchaseRequests' : IDL.Func(
+      [],
+      [IDL.Vec(PointsPurchaseRequest)],
+      ['query'],
+    ),
+  'getCallerPointsTransactions' : IDL.Func(
+      [],
+      [IDL.Vec(PointsTransaction)],
+      ['query'],
+    ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getCallerWalletTopUpTransactions' : IDL.Func(
+  'getCallerWalletTransactions' : IDL.Func(
       [],
       [IDL.Vec(WalletTopUpTransaction)],
       ['query'],
     ),
+  'getConversionSettings' : IDL.Func([], [ConversionSettings], ['query']),
   'getProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
-  'getUsers' : IDL.Func(
-      [],
-      [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
-      ['query'],
-    ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'purchaseDiamondsWithPoints' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
+  'rejectPointsPurchaseRequest' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'rejectWalletTopUpTransaction' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-  'submitWalletTopUpTransaction' : IDL.Func(
+  'submitAddMoneyTransaction' : IDL.Func(
       [IDL.Nat64, PaymentMethod, IDL.Text],
       [],
       [],
     ),
-  'updateOrderStatus' : IDL.Func([IDL.Nat32, OrderStatus], [IDL.Bool], []),
+  'submitPointsPurchaseRequest' : IDL.Func([IDL.Nat64, IDL.Text], [], []),
+  'updateConversionSettings' : IDL.Func(
+      [IDL.Nat64, IDL.Nat64, IDL.Nat64],
+      [],
+      [],
+    ),
   'updateProduct' : IDL.Func(
       [IDL.Nat32, IDL.Text, IDL.Nat64, IDL.Bool],
       [IDL.Bool],
@@ -116,21 +188,48 @@ export const idlFactory = ({ IDL }) => {
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
-  const OrderStatus = IDL.Variant({
-    'pending' : IDL.Null,
-    'delivered' : IDL.Null,
-    'processing' : IDL.Null,
-    'failed' : IDL.Null,
+  const AdminDashboard = IDL.Record({
+    'totalAdProfit' : IDL.Nat64,
+    'totalDiamonds' : IDL.Nat64,
+    'totalUsers' : IDL.Nat,
+    'totalPoints' : IDL.Int,
+    'totalRevenue' : IDL.Nat64,
   });
   const Time = IDL.Int;
-  const ProductOrder = IDL.Record({
-    'id' : IDL.Nat32,
-    'status' : OrderStatus,
+  const DiamondPurchase = IDL.Record({
+    'id' : IDL.Text,
+    'packageName' : IDL.Text,
     'createdAt' : Time,
     'user' : IDL.Principal,
-    'productId' : IDL.Nat32,
-    'amount' : IDL.Nat64,
-    'isAutoDelivery' : IDL.Bool,
+    'diamondsAwarded' : IDL.Nat64,
+    'pointsDeducted' : IDL.Nat64,
+  });
+  const PointsPurchaseStatus = IDL.Variant({
+    'pending' : IDL.Null,
+    'approved' : IDL.Null,
+    'rejected' : IDL.Null,
+  });
+  const PointsPurchaseRequest = IDL.Record({
+    'id' : IDL.Text,
+    'status' : PointsPurchaseStatus,
+    'createdAt' : Time,
+    'user' : IDL.Principal,
+    'amount' : IDL.Int,
+    'bdtAmount' : IDL.Nat64,
+  });
+  const PointsTransactionType = IDL.Variant({
+    'adReward' : IDL.Null,
+    'adminAdjustment' : IDL.Null,
+    'spend' : IDL.Null,
+    'purchase' : IDL.Null,
+  });
+  const PointsTransaction = IDL.Record({
+    'id' : IDL.Text,
+    'transactionType' : PointsTransactionType,
+    'metadata' : IDL.Text,
+    'createdAt' : Time,
+    'user' : IDL.Principal,
+    'amount' : IDL.Int,
   });
   const TransactionStatus = IDL.Variant({
     'pending' : IDL.Null,
@@ -152,6 +251,11 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'phone' : IDL.Text,
   });
+  const ConversionSettings = IDL.Record({
+    'pointsToDiamondsRate' : IDL.Nat64,
+    'diamondsPerPackage' : IDL.Nat64,
+    'bdtToPointsRate' : IDL.Nat64,
+  });
   const Product = IDL.Record({
     'id' : IDL.Nat32,
     'name' : IDL.Text,
@@ -162,13 +266,30 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'addProduct' : IDL.Func([IDL.Text, IDL.Nat64, IDL.Bool], [IDL.Nat32], []),
+    'approvePointsPurchaseRequest' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'approveWalletTopUpTransaction' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'createOrder' : IDL.Func([IDL.Nat32], [IDL.Nat32], []),
+    'claimAdReward' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'deleteProduct' : IDL.Func([IDL.Nat32], [], []),
-    'getAllOrdersSortedByTime' : IDL.Func(
+    'getAdRewardsAnalytics' : IDL.Func(
         [],
-        [IDL.Vec(ProductOrder)],
+        [IDL.Record({ 'totalProfit' : IDL.Nat64, 'totalAdRewards' : IDL.Nat })],
+        ['query'],
+      ),
+    'getAdminDashboard' : IDL.Func([], [AdminDashboard], ['query']),
+    'getAllDiamondPurchases' : IDL.Func(
+        [],
+        [IDL.Vec(DiamondPurchase)],
+        ['query'],
+      ),
+    'getAllPointsPurchaseRequests' : IDL.Func(
+        [],
+        [IDL.Vec(PointsPurchaseRequest)],
+        ['query'],
+      ),
+    'getAllPointsTransactions' : IDL.Func(
+        [],
+        [IDL.Vec(PointsTransaction)],
         ['query'],
       ),
     'getAllWalletTopUpTransactions' : IDL.Func(
@@ -177,34 +298,57 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getCallerBalance' : IDL.Func([], [IDL.Nat64], ['query']),
-    'getCallerOrders' : IDL.Func([], [IDL.Vec(ProductOrder)], ['query']),
+    'getCallerDailyAdCount' : IDL.Func([], [IDL.Nat], ['query']),
+    'getCallerDiamondPurchases' : IDL.Func(
+        [],
+        [IDL.Vec(DiamondPurchase)],
+        ['query'],
+      ),
+    'getCallerPointsBalance' : IDL.Func([], [IDL.Int], ['query']),
+    'getCallerPointsPurchaseRequests' : IDL.Func(
+        [],
+        [IDL.Vec(PointsPurchaseRequest)],
+        ['query'],
+      ),
+    'getCallerPointsTransactions' : IDL.Func(
+        [],
+        [IDL.Vec(PointsTransaction)],
+        ['query'],
+      ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getCallerWalletTopUpTransactions' : IDL.Func(
+    'getCallerWalletTransactions' : IDL.Func(
         [],
         [IDL.Vec(WalletTopUpTransaction)],
         ['query'],
       ),
+    'getConversionSettings' : IDL.Func([], [ConversionSettings], ['query']),
     'getProducts' : IDL.Func([], [IDL.Vec(Product)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
-    'getUsers' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, UserProfile))],
-        ['query'],
-      ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'purchaseDiamondsWithPoints' : IDL.Func(
+        [IDL.Text, IDL.Text],
+        [IDL.Bool],
+        [],
+      ),
+    'rejectPointsPurchaseRequest' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'rejectWalletTopUpTransaction' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-    'submitWalletTopUpTransaction' : IDL.Func(
+    'submitAddMoneyTransaction' : IDL.Func(
         [IDL.Nat64, PaymentMethod, IDL.Text],
         [],
         [],
       ),
-    'updateOrderStatus' : IDL.Func([IDL.Nat32, OrderStatus], [IDL.Bool], []),
+    'submitPointsPurchaseRequest' : IDL.Func([IDL.Nat64, IDL.Text], [], []),
+    'updateConversionSettings' : IDL.Func(
+        [IDL.Nat64, IDL.Nat64, IDL.Nat64],
+        [],
+        [],
+      ),
     'updateProduct' : IDL.Func(
         [IDL.Nat32, IDL.Text, IDL.Nat64, IDL.Bool],
         [IDL.Bool],

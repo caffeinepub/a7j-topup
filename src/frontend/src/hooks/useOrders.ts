@@ -1,6 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ProductOrder } from '../backend';
+
+// Note: ProductOrder type and order methods are not available in the current backend
+// Returning empty arrays as placeholders
+
+interface ProductOrder {
+  id: number;
+  user: any;
+  productId: number;
+  status: string;
+  amount: bigint;
+  createdAt: bigint;
+  isAutoDelivery: boolean;
+}
 
 export function useGetCallerOrders() {
   const { actor, isFetching } = useActor();
@@ -8,8 +20,8 @@ export function useGetCallerOrders() {
   return useQuery<ProductOrder[]>({
     queryKey: ['callerOrders'],
     queryFn: async () => {
-      if (!actor) return [];
-      return actor.getCallerOrders();
+      // Backend method not available yet
+      return [];
     },
     enabled: !!actor && !isFetching,
   });
@@ -22,7 +34,8 @@ export function useCreateOrder() {
   return useMutation({
     mutationFn: async (productId: number) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.createOrder(productId);
+      // Backend method not available yet
+      throw new Error('Order creation is not yet available');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['callerOrders'] });
@@ -37,8 +50,8 @@ export function useGetAllOrders() {
   return useQuery<ProductOrder[]>({
     queryKey: ['allOrders'],
     queryFn: async () => {
-      if (!actor) return [];
-      return actor.getAllOrdersSortedByTime();
+      // Backend method not available yet
+      return [];
     },
     enabled: !!actor && !isFetching,
   });

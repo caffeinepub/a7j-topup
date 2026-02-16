@@ -22,7 +22,7 @@ export function useGetCallerTransactions() {
     queryKey: ['callerTransactions'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getCallerWalletTopUpTransactions();
+      return actor.getCallerWalletTransactions();
     },
     enabled: !!actor && !isFetching,
   });

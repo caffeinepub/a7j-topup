@@ -1,44 +1,54 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Add Money page update for A7J TOPUP: show personal payment numbers for bKash/Nagad and a clear instructions + notice box with clean white fintech UI styling.",
+  "summary": "A7J TOPUP system: wallet topups (bKash/Nagad) with admin approval, wallet-to-points conversion, points-to-diamonds topups, ad-based point earning, plus admin panel for approvals, transaction tracking, and conversion rate settings; redesign website with clean white/purple professional responsive theme.",
   "architectural_notes": [
-    "Add Money page UI: white background, clean professional card layout, soft shadow, rounded corners, purple buttons, bKash/Nagad payment icons.",
-    "Add Money flow instructions: send money to chosen number → enter amount → enter transaction ID → submit → admin verifies and adds balance; show notice that balance is added only after admin approval and not to send money without submitting transaction ID."
+    "TxID must be validated as non-empty and unique to prevent duplicate topup submissions.",
+    "Topup requests stored with status flow (e.g., Pending → Admin Approved) before updating wallet balance.",
+    "Admin-controlled conversion rates for BDT→Points and Points→Diamonds."
   ],
-  "known_issues": [],
+  "known_issues": [
+    "Build/implementation failed previously with an 'Unexpected AI error' and inability to implement the request; may require retry/simplification."
+  ],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- bKash payment method icon, flat vector-style, transparent background (bkash-icon.dim_128x128.png)\n- Nagad payment method icon, flat vector-style, transparent background (nagad-icon.dim_128x128.png)",
   "existing_features": [
     {
-      "id": "feature-update-the-add-money-page-frontend-src-pages-addmoneypage-tsx-to-display-the-a7j-topup-personal-payment-numbers-for-each-payment-method-bkash-personal-01868226859-nagad-personal-01784377956-the-numbers-must-be-clearly-visible-in-the-ui-english-text-associated-with-their-respective-payment-method-and-easy-to-copy-read",
-      "title": "Update the Add Money page (frontend/src/pages/AddMoneyPage.tsx) to display the A7J TOPUP personal payment numbers for each payment method: bKash Personal: 01868226859; Nagad Personal: 01784377956. The numbers must be clearly visible in the UI (English text), associated with their respective payment method, and easy to copy/read.",
+      "id": "feature-update-the-global-visual-theme-to-a-clean-professional-look-pure-white-backgrounds-purple-accent-color-6c5ce7-clean-sans-serif-typography-consistent-sizing-spacing-rounded-corners-and-soft-shadows-remove-any-dark-gaming-arena-styling-and-heavy-gradients-across-the-ui",
+      "title": "Update the global visual theme to a clean professional look: pure white backgrounds, purple accent color #6C5CE7, clean sans-serif typography, consistent sizing/spacing, rounded corners, and soft shadows; remove any dark/gaming/arena styling and heavy gradients across the UI.",
       "reqIds": [
-        "REQ-9"
+        "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-prominent-instruction-card-box-on-the-add-money-page-with-the-exact-english-content-provided-by-the-user-title-how-to-add-money-steps-1-send-money-to-the-chosen-number-bkash-or-nagad-2-enter-the-amount-3-after-payment-enter-transaction-id-4-click-submit-5-admin-will-verify-and-add-balance-and-an-important-notice-section-with-bullet-points-balance-will-be-added-only-after-admin-approval-and-do-not-send-money-without-submitting-transaction-id",
-      "title": "Add a prominent instruction card/box on the Add Money page with the exact English content provided by the user: Title 'How to Add Money'; Steps: (1) 'Send money to the chosen number (bKash or Nagad)' (2) 'Enter the amount' (3) 'After payment, enter Transaction ID' (4) 'Click Submit' (5) 'Admin will verify and add balance'; and an 'Important Notice' section with bullet points: 'Balance will be added only after admin approval' and 'Do not send money without submitting transaction ID'.",
+      "id": "feature-redesign-the-header-navigation-to-match-logo-on-the-left-nav-links-home-add-money-buy-points-topup-diamonds-earn-points-and-a-wallet-balance-display-keep-the-header-fully-responsive-with-a-mobile-menu",
+      "title": "Redesign the header/navigation to match: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), and a wallet balance display; keep the header fully responsive with a mobile menu.",
       "reqIds": [
-        "REQ-10"
+        "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-adjust-the-add-money-page-layout-and-styling-to-match-the-requested-design-white-page-background-clean-professional-card-layout-purple-buttons-payment-icons-for-bkash-and-nagad-next-to-their-method-display-and-soft-shadows-with-rounded-corners-keep-existing-add-money-submission-flow-and-transaction-history-functionality-intact",
-      "title": "Adjust the Add Money page layout and styling to match the requested design: white page background, clean professional card layout, purple buttons, payment icons for bKash and Nagad next to their method display, and soft shadows with rounded corners. Keep existing Add Money submission flow and transaction history functionality intact.",
+      "id": "feature-redesign-the-home-page-hero-section-to-be-minimal-and-professional-white-background-bold-headline-small-subtitle-and-a-clear-call-to-action-button-labeled-add-money-that-routes-to-the-add-money-flow",
+      "title": "Redesign the Home page hero section to be minimal and professional: white background, bold headline, small subtitle, and a clear call-to-action button labeled \"Add Money\" that routes to the Add Money flow.",
       "reqIds": [
-        "REQ-11"
+        "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-the-required-payment-method-icon-assets-to-the-frontend-static-assets-directory-and-render-them-on-the-add-money-page-without-routing-images-through-the-backend-serve-from-frontend-public-assets-generated",
-      "title": "Add the required payment method icon assets to the frontend static assets directory and render them on the Add Money page without routing images through the backend (serve from frontend/public/assets/generated).",
+      "id": "feature-update-all-card-section-styling-used-on-landing-and-core-pages-to-use-rounded-corners-soft-shadows-and-a-white-light-gray-palette-no-gradient-card-backgrounds-ensure-spacing-and-layout-remain-mobile-responsive",
+      "title": "Update all card/section styling used on landing and core pages to use rounded corners, soft shadows, and a white/light-gray palette (no gradient card backgrounds); ensure spacing and layout remain mobile responsive.",
       "reqIds": [
-        "REQ-12"
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-redesign-the-footer-to-a-light-gray-background-with-clear-sections-for-contact-info-social-links-and-terms-keep-it-responsive-and-professional",
+      "title": "Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; keep it responsive and professional.",
+      "reqIds": [
+        "REQ-5"
       ],
       "version": 1
     }
@@ -46,12 +56,41 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Update Add Money page for A7J TOPUP to display bKash/Nagad personal numbers, add 'How to Add Money' instruction box + Important Notice, and apply clean white card UI with purple buttons and payment icons.",
+      "summary": "Wallet topup via bKash/Nagad with TxID submission, validation (non-empty/unique), pending status, admin approval, user notifications, and wallet balance dashboard display",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Points system: buy points using wallet at 3 BDT = 1 point with automatic wallet deduction, transaction history, duplicate submission prevention, and optional admin approval for point purchases",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Diamond topup using points: spend points on diamond packages (e.g., 69 points = 100 diamonds) and credit diamonds after deduction",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Earn points by watching ads (+1 point per ad) with optional daily limits and admin profit tracking",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Admin panel: approve wallet topups (and point purchases if manual), view wallet/points/diamonds/ads transactions, and set conversion rates (BDT→Points, Points→Diamonds)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Website redesign: clean professional UI with pure white background, purple accent (#6C5CE7), responsive header/nav (Home/Add Money/Buy Points/Topup Diamonds/Earn Points) with wallet balance, hero CTA, light-gray footer, rounded cards with soft shadows, clean sans-serif typography, remove dark/gaming/gradient style",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
   "projectName": "A7J TOPUP",
   "clarification_mode": "instant",
   "clarification_rounds": 0

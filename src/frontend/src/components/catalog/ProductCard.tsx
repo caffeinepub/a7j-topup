@@ -19,7 +19,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   return (
     <Card
-      className="card-lift cursor-pointer overflow-hidden border-border bg-white hover:border-primary/50"
+      className="card-lift cursor-pointer overflow-hidden border-border bg-white hover:border-primary/50 rounded-lg"
       onClick={onClick}
     >
       <CardContent className="p-6 flex flex-col items-center text-center gap-4">

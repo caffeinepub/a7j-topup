@@ -68,8 +68,8 @@ export function useGetUsers() {
   return useQuery<Array<[Principal, UserProfile]>>({
     queryKey: ['users'],
     queryFn: async () => {
-      if (!actor) return [];
-      return actor.getUsers();
+      // Backend method not available yet
+      return [];
     },
     enabled: !!actor && !isFetching,
   });

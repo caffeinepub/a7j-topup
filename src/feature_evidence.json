@@ -2,10 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-add-money-page-frontend-src-pages-addmoneypage-tsx-to-display-the-a7j-topup-personal-payment-numbers-for-each-payment-method-bkash-personal-01868226859-nagad-personal-01784377956-the-numbers-must-be-clearly-visible-in-the-ui-english-text-associated-with-their-respective-payment-method-and-easy-to-copy-read",
-      "featureTitle": "Update the Add Money page (frontend/src/pages/AddMoneyPage.tsx) to display the A7J TOPUP personal payment numbers for each payment method: bKash Personal: 01868226859; Nagad Personal: 01784377956. The numbers must be clearly visible in the UI (English text), associated with their respective payment method, and easy to copy/read.",
+      "featureId": "feature-update-the-global-visual-theme-to-a-clean-professional-look-pure-white-backgrounds-purple-accent-color-6c5ce7-clean-sans-serif-typography-consistent-sizing-spacing-rounded-corners-and-soft-shadows-remove-any-dark-gaming-arena-styling-and-heavy-gradients-across-the-ui",
+      "featureTitle": "Update the global visual theme to a clean professional look: pure white backgrounds, purple accent color #6C5CE7, clean sans-serif typography, consistent sizing/spacing, rounded corners, and soft shadows; remove any dark/gaming/arena styling and heavy gradients across the UI.",
       "files": [
-        "frontend/src/pages/AddMoneyPage.tsx"
+        "frontend/src/components/catalog/ProductCard.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,15 +18,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-9"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-prominent-instruction-card-box-on-the-add-money-page-with-the-exact-english-content-provided-by-the-user-title-how-to-add-money-steps-1-send-money-to-the-chosen-number-bkash-or-nagad-2-enter-the-amount-3-after-payment-enter-transaction-id-4-click-submit-5-admin-will-verify-and-add-balance-and-an-important-notice-section-with-bullet-points-balance-will-be-added-only-after-admin-approval-and-do-not-send-money-without-submitting-transaction-id",
-      "featureTitle": "Add a prominent instruction card/box on the Add Money page with the exact English content provided by the user: Title 'How to Add Money'; Steps: (1) 'Send money to the chosen number (bKash or Nagad)' (2) 'Enter the amount' (3) 'After payment, enter Transaction ID' (4) 'Click Submit' (5) 'Admin will verify and add balance'; and an 'Important Notice' section with bullet points: 'Balance will be added only after admin approval' and 'Do not send money without submitting transaction ID'.",
+      "featureId": "feature-redesign-the-header-navigation-to-match-logo-on-the-left-nav-links-home-add-money-buy-points-topup-diamonds-earn-points-and-a-wallet-balance-display-keep-the-header-fully-responsive-with-a-mobile-menu",
+      "featureTitle": "Redesign the header/navigation to match: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), and a wallet balance display; keep the header fully responsive with a mobile menu.",
       "files": [
-        "frontend/src/pages/AddMoneyPage.tsx"
+        "frontend/src/components/navigation/HeaderNav.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -35,15 +37,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
+        "REQ-2"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-adjust-the-add-money-page-layout-and-styling-to-match-the-requested-design-white-page-background-clean-professional-card-layout-purple-buttons-payment-icons-for-bkash-and-nagad-next-to-their-method-display-and-soft-shadows-with-rounded-corners-keep-existing-add-money-submission-flow-and-transaction-history-functionality-intact",
-      "featureTitle": "Adjust the Add Money page layout and styling to match the requested design: white page background, clean professional card layout, purple buttons, payment icons for bKash and Nagad next to their method display, and soft shadows with rounded corners. Keep existing Add Money submission flow and transaction history functionality intact.",
+      "featureId": "feature-redesign-the-home-page-hero-section-to-be-minimal-and-professional-white-background-bold-headline-small-subtitle-and-a-clear-call-to-action-button-labeled-add-money-that-routes-to-the-add-money-flow",
+      "featureTitle": "Redesign the Home page hero section to be minimal and professional: white background, bold headline, small subtitle, and a clear call-to-action button labeled \"Add Money\" that routes to the Add Money flow.",
       "files": [
-        "frontend/src/pages/AddMoneyPage.tsx"
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -54,15 +56,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-3"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-the-required-payment-method-icon-assets-to-the-frontend-static-assets-directory-and-render-them-on-the-add-money-page-without-routing-images-through-the-backend-serve-from-frontend-public-assets-generated",
-      "featureTitle": "Add the required payment method icon assets to the frontend static assets directory and render them on the Add Money page without routing images through the backend (serve from frontend/public/assets/generated).",
+      "featureId": "feature-update-all-card-section-styling-used-on-landing-and-core-pages-to-use-rounded-corners-soft-shadows-and-a-white-light-gray-palette-no-gradient-card-backgrounds-ensure-spacing-and-layout-remain-mobile-responsive",
+      "featureTitle": "Update all card/section styling used on landing and core pages to use rounded corners, soft shadows, and a white/light-gray palette (no gradient card backgrounds); ensure spacing and layout remain mobile responsive.",
       "files": [
-        "frontend/src/pages/AddMoneyPage.tsx"
+        "frontend/src/index.css",
+        "frontend/src/pages/HomePage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -73,7 +76,26 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-12"
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-redesign-the-footer-to-a-light-gray-background-with-clear-sections-for-contact-info-social-links-and-terms-keep-it-responsive-and-professional",
+      "featureTitle": "Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; keep it responsive and professional.",
+      "files": [
+        "frontend/src/components/layout/SiteFooter.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
       ],
       "confidence": "high"
     }

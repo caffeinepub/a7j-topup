@@ -2,20 +2,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Wallet, ShoppingBag, History } from 'lucide-react';
+import { Wallet, ShoppingBag, History, Coins, Plus, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useGetCallerBalance, useGetCallerTransactions } from '../hooks/useWallet';
 import { useGetCallerOrders } from '../hooks/useOrders';
 import { useGetCallerUserProfile, useSaveCallerUserProfile } from '../hooks/useQueries';
+import { useGetCallerPointsBalance, useGetCallerPointsTransactions } from '../hooks/usePoints';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const { data: balance = BigInt(0) } = useGetCallerBalance();
+  const { data: pointsBalance = BigInt(0) } = useGetCallerPointsBalance();
   const { data: transactions = [] } = useGetCallerTransactions();
+  const { data: pointsTransactions = [] } = useGetCallerPointsTransactions();
   const { data: orders = [] } = useGetCallerOrders();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
   const saveProfile = useSaveCallerUserProfile();
@@ -64,6 +69,21 @@ export default function DashboardPage() {
         return <Badge variant="destructive">Rejected</Badge>;
       default:
         return <Badge variant="secondary">Pending</Badge>;
+    }
+  };
+
+  const getPointsTransactionTypeBadge = (type: string) => {
+    switch (type) {
+      case 'purchase':
+        return <Badge className="bg-green-500 text-white">Purchase</Badge>;
+      case 'spend':
+        return <Badge className="bg-blue-500 text-white">Spend</Badge>;
+      case 'adReward':
+        return <Badge className="bg-purple-500 text-white">Ad Reward</Badge>;
+      case 'adminAdjustment':
+        return <Badge variant="secondary">Admin</Badge>;
+      default:
+        return <Badge variant="outline">{type}</Badge>;
     }
   };
 
@@ -128,29 +148,97 @@ export default function DashboardPage() {
 
       <h1 className="text-4xl font-bold text-gradient-purple mb-8">Dashboard</h1>
 
-      {/* Wallet Balance */}
-      <Card className="bg-primary shadow-soft border-primary/30 mb-8">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Wallet className="w-6 h-6 text-white" />
-            <CardTitle className="text-white">Wallet Balance</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-4xl font-bold text-white">৳{balance.toString()}</p>
-        </CardContent>
-      </Card>
+      {/* Balance Cards */}
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <Card className="bg-primary shadow-soft border-primary/30">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Wallet className="w-6 h-6 text-white" />
+              <CardTitle className="text-white">Wallet Balance</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-white mb-4">৳{balance.toString()}</p>
+            <Button
+              onClick={() => navigate({ to: '/add-money' })}
+              className="bg-white text-primary hover:bg-white/90"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Money
+            </Button>
+          </CardContent>
+        </Card>
 
-      {/* Tabs for Orders and Transactions */}
+        <Card className="bg-gradient-to-br from-purple-600 to-purple-700 shadow-soft border-purple-600">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Coins className="w-6 h-6 text-white" />
+              <CardTitle className="text-white">Points Balance</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-white mb-4">{pointsBalance.toString()} Points</p>
+            <Button
+              onClick={() => navigate({ to: '/buy-points' })}
+              className="bg-white text-purple-600 hover:bg-white/90"
+            >
+              <ArrowRight className="w-4 h-4 mr-2" />
+              Buy Points
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <Button
+          onClick={() => navigate({ to: '/add-money' })}
+          variant="outline"
+          className="h-auto py-4 flex-col gap-2 border-primary/30 hover:bg-primary/5"
+        >
+          <Wallet className="w-6 h-6 text-primary" />
+          <span className="text-sm">Add Money</span>
+        </Button>
+        <Button
+          onClick={() => navigate({ to: '/buy-points' })}
+          variant="outline"
+          className="h-auto py-4 flex-col gap-2 border-primary/30 hover:bg-primary/5"
+        >
+          <Coins className="w-6 h-6 text-primary" />
+          <span className="text-sm">Buy Points</span>
+        </Button>
+        <Button
+          onClick={() => navigate({ to: '/buy-diamonds' })}
+          variant="outline"
+          className="h-auto py-4 flex-col gap-2 border-primary/30 hover:bg-primary/5"
+        >
+          <ShoppingBag className="w-6 h-6 text-primary" />
+          <span className="text-sm">Buy Diamonds</span>
+        </Button>
+        <Button
+          onClick={() => navigate({ to: '/ad-rewards' })}
+          variant="outline"
+          className="h-auto py-4 flex-col gap-2 border-primary/30 hover:bg-primary/5"
+        >
+          <History className="w-6 h-6 text-primary" />
+          <span className="text-sm">Ad Rewards</span>
+        </Button>
+      </div>
+
+      {/* Tabs for Orders, Transactions, and Points */}
       <Tabs defaultValue="orders" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2 bg-muted/30">
+        <TabsList className="grid w-full grid-cols-3 bg-muted/30">
           <TabsTrigger value="orders">
             <ShoppingBag className="w-4 h-4 mr-2" />
-            Order History
+            Orders
           </TabsTrigger>
           <TabsTrigger value="transactions">
             <History className="w-4 h-4 mr-2" />
-            Transaction History
+            Wallet
+          </TabsTrigger>
+          <TabsTrigger value="points">
+            <Coins className="w-4 h-4 mr-2" />
+            Points
           </TabsTrigger>
         </TabsList>
 
@@ -204,7 +292,7 @@ export default function DashboardPage() {
         <TabsContent value="transactions">
           <Card className="border-primary/30 shadow-soft bg-white">
             <CardHeader>
-              <CardTitle>Transaction History</CardTitle>
+              <CardTitle>Wallet Transaction History</CardTitle>
               <CardDescription>View your wallet top-up requests</CardDescription>
             </CardHeader>
             <CardContent>
@@ -228,6 +316,49 @@ export default function DashboardPage() {
                           <TableCell className="capitalize">{tx.paymentMethod}</TableCell>
                           <TableCell>৳{tx.amount.toString()}</TableCell>
                           <TableCell>{getTransactionStatusBadge(tx.status)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="points">
+          <Card className="border-primary/30 shadow-soft bg-white">
+            <CardHeader>
+              <CardTitle>Points Transaction History</CardTitle>
+              <CardDescription>View your points activity</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {pointsTransactions.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">No points transactions yet</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Date</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {pointsTransactions.map((tx) => (
+                        <TableRow key={tx.id}>
+                          <TableCell>{getPointsTransactionTypeBadge(tx.transactionType)}</TableCell>
+                          <TableCell>
+                            <span className={tx.amount >= 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
+                              {tx.amount >= 0 ? '+' : ''}{tx.amount.toString()}
+                            </span>
+                          </TableCell>
+                          <TableCell className="max-w-xs truncate">{tx.metadata}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {new Date(Number(tx.createdAt) / 1000000).toLocaleDateString()}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

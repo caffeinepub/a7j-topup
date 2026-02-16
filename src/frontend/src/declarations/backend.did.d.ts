@@ -10,25 +10,55 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export type OrderStatus = { 'pending' : null } |
-  { 'delivered' : null } |
-  { 'processing' : null } |
-  { 'failed' : null };
+export interface AdminDashboard {
+  'totalAdProfit' : bigint,
+  'totalDiamonds' : bigint,
+  'totalUsers' : bigint,
+  'totalPoints' : bigint,
+  'totalRevenue' : bigint,
+}
+export interface ConversionSettings {
+  'pointsToDiamondsRate' : bigint,
+  'diamondsPerPackage' : bigint,
+  'bdtToPointsRate' : bigint,
+}
+export interface DiamondPurchase {
+  'id' : string,
+  'packageName' : string,
+  'createdAt' : Time,
+  'user' : Principal,
+  'diamondsAwarded' : bigint,
+  'pointsDeducted' : bigint,
+}
 export type PaymentMethod = { 'nagad' : null } |
   { 'bkash' : null };
+export interface PointsPurchaseRequest {
+  'id' : string,
+  'status' : PointsPurchaseStatus,
+  'createdAt' : Time,
+  'user' : Principal,
+  'amount' : bigint,
+  'bdtAmount' : bigint,
+}
+export type PointsPurchaseStatus = { 'pending' : null } |
+  { 'approved' : null } |
+  { 'rejected' : null };
+export interface PointsTransaction {
+  'id' : string,
+  'transactionType' : PointsTransactionType,
+  'metadata' : string,
+  'createdAt' : Time,
+  'user' : Principal,
+  'amount' : bigint,
+}
+export type PointsTransactionType = { 'adReward' : null } |
+  { 'adminAdjustment' : null } |
+  { 'spend' : null } |
+  { 'purchase' : null };
 export interface Product {
   'id' : number,
   'name' : string,
   'price' : bigint,
-  'isAutoDelivery' : boolean,
-}
-export interface ProductOrder {
-  'id' : number,
-  'status' : OrderStatus,
-  'createdAt' : Time,
-  'user' : Principal,
-  'productId' : number,
-  'amount' : bigint,
   'isAutoDelivery' : boolean,
 }
 export type Time = bigint;
@@ -55,34 +85,55 @@ export interface WalletTopUpTransaction {
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'addProduct' : ActorMethod<[string, bigint, boolean], number>,
+  'approvePointsPurchaseRequest' : ActorMethod<[string], boolean>,
   'approveWalletTopUpTransaction' : ActorMethod<[string], boolean>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  'createOrder' : ActorMethod<[number], number>,
+  'claimAdReward' : ActorMethod<[string], boolean>,
   'deleteProduct' : ActorMethod<[number], undefined>,
-  'getAllOrdersSortedByTime' : ActorMethod<[], Array<ProductOrder>>,
+  'getAdRewardsAnalytics' : ActorMethod<
+    [],
+    { 'totalProfit' : bigint, 'totalAdRewards' : bigint }
+  >,
+  'getAdminDashboard' : ActorMethod<[], AdminDashboard>,
+  'getAllDiamondPurchases' : ActorMethod<[], Array<DiamondPurchase>>,
+  'getAllPointsPurchaseRequests' : ActorMethod<
+    [],
+    Array<PointsPurchaseRequest>
+  >,
+  'getAllPointsTransactions' : ActorMethod<[], Array<PointsTransaction>>,
   'getAllWalletTopUpTransactions' : ActorMethod<
     [],
     Array<WalletTopUpTransaction>
   >,
   'getCallerBalance' : ActorMethod<[], bigint>,
-  'getCallerOrders' : ActorMethod<[], Array<ProductOrder>>,
+  'getCallerDailyAdCount' : ActorMethod<[], bigint>,
+  'getCallerDiamondPurchases' : ActorMethod<[], Array<DiamondPurchase>>,
+  'getCallerPointsBalance' : ActorMethod<[], bigint>,
+  'getCallerPointsPurchaseRequests' : ActorMethod<
+    [],
+    Array<PointsPurchaseRequest>
+  >,
+  'getCallerPointsTransactions' : ActorMethod<[], Array<PointsTransaction>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getCallerWalletTopUpTransactions' : ActorMethod<
+  'getCallerWalletTransactions' : ActorMethod<
     [],
     Array<WalletTopUpTransaction>
   >,
+  'getConversionSettings' : ActorMethod<[], ConversionSettings>,
   'getProducts' : ActorMethod<[], Array<Product>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
-  'getUsers' : ActorMethod<[], Array<[Principal, UserProfile]>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'purchaseDiamondsWithPoints' : ActorMethod<[string, string], boolean>,
+  'rejectPointsPurchaseRequest' : ActorMethod<[string], boolean>,
   'rejectWalletTopUpTransaction' : ActorMethod<[string], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
-  'submitWalletTopUpTransaction' : ActorMethod<
+  'submitAddMoneyTransaction' : ActorMethod<
     [bigint, PaymentMethod, string],
     undefined
   >,
-  'updateOrderStatus' : ActorMethod<[number, OrderStatus], boolean>,
+  'submitPointsPurchaseRequest' : ActorMethod<[bigint, string], undefined>,
+  'updateConversionSettings' : ActorMethod<[bigint, bigint, bigint], undefined>,
   'updateProduct' : ActorMethod<[number, string, bigint, boolean], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;

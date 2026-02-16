@@ -1,38 +1,71 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T09:45:27.359Z",
-  "summary": "Diff updates AddMoneyPage.tsx with new UI elements (instructions card, copy-to-clipboard/toasts, styling). However, the required static icon image assets are not added in the diff, and some requested instruction content/icons cannot be fully verified due to truncation.",
+  "generatedAt": "2026-02-16T13:42:12.397Z",
+  "summary": "Most of the requested white/purple professional redesign appears implemented in global CSS theme tokens, header nav structure (including specified links + wallet balance), Home hero layout/CTA, updated card styling, and a light-gray footer with contact/social/legal sections. However, the Home hero copy still references “gaming top-ups,” and the diff summary indicates additional auth/routing/admin/business-logic related work and even a gradient button that were not requested in this UI-only redesign.",
   "missing_requirements": [
     {
-      "id": "REQ-12",
-      "requirement": "Add the required payment method icon assets under frontend/public/assets/generated with the exact filenames bkash-icon.dim_128x128.png and nagad-icon.dim_128x128.png, and render them on the Add Money page via static asset paths (no backend routing).",
-      "reason": "The diff shows 'Added: 0' with no new files, and there is no evidence of the required icon files being added under frontend/public/assets/generated.",
+      "id": "REQ-3",
+      "requirement": "Hero copy is in English and avoids gaming-arena tone (no \"Gaming Top-Up\" style messaging).",
+      "reason": "The Home hero subtitle explicitly mentions “gaming top-ups,” which conflicts with the acceptance criteria to avoid gaming-arena/gaming-topup tone.",
       "evidence": [
-        "file-diff summary: Added: 0, Modified: 3, Removed: 0"
+        "frontend/src/pages/HomePage.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Copy-to-clipboard for payment numbers with success toast notifications and a temporary 'copied' state.",
-      "reason": "The BuildRequest requires numbers to be visible and easy to copy/read, but does not request implementing clipboard copy buttons/toast notifications/state management.",
+      "description": "Added/changed authenticated routing and route protection (AuthGate) including new authenticated routes for Buy Points, Buy Diamonds, and Ad Rewards.",
+      "reason": "BuildRequest is a UI redesign only and explicitly states non-goals include changing business logic/behavior; routing/auth gates and new route protection are not requested in REQ-1..REQ-5.",
       "evidence": [
-        "frontend/src/pages/AddMoneyPage.tsx (handleCopyNumber uses navigator.clipboard.writeText, toast.success, copiedNumber state)"
+        "frontend-file-summaries.txt (mentions frontend/src/App.tsx and frontend/src/components/auth/AuthGate.tsx)"
       ]
     },
     {
-      "description": "Client-side Toaster integration on the Add Money page.",
-      "reason": "The BuildRequest does not request adding toast infrastructure/UI feedback components; it only specifies layout/content/icon requirements and not notification UI.",
+      "description": "Added/changed admin authorization gating (AdminGate) and access-denied screens, plus claim-admin-access behavior.",
+      "reason": "No requirements mention admin gating/authorization UX changes; this is outside the requested header/home/cards/footer redesign scope.",
       "evidence": [
-        "frontend/src/pages/AddMoneyPage.tsx (imports Toaster from '@/components/ui/sonner' and renders <Toaster />)"
+        "frontend-file-summaries.txt (mentions frontend/src/components/auth/AdminGate.tsx and frontend/src/components/auth/AccessDeniedScreen.tsx)"
+      ]
+    },
+    {
+      "description": "Implemented/changed Add Money flow behavior details (TxID uniqueness handling, specific success message, pending wallet transactions history).",
+      "reason": "BuildRequest constraints state backend behavior and data models must remain unchanged and this request is UI redesign only; these are behavioral/flow requirements not requested in REQ-1..REQ-5.",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/pages/AddMoneyPage.tsx behavior and messages)"
+      ]
+    },
+    {
+      "description": "Enhanced user dashboard with balances, quick actions, tabs, and transaction history tables.",
+      "reason": "Not requested by REQ-1..REQ-5 (no dashboard redesign requirement).",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/pages/DashboardPage.tsx)"
+      ]
+    },
+    {
+      "description": "Comprehensive admin panel features (KPI cards, approvals, conversion settings management, ad analytics/profit tracking, multiple tabs).",
+      "reason": "Explicit non-goals include not implementing/changing wallet/points/diamonds logic; admin analytics/settings features are not part of the UI redesign requirements listed.",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/pages/admin/AdminPanelPage.tsx)"
+      ]
+    },
+    {
+      "description": "Install app promotional bar with a “purple gradient accent button” and localStorage persistence.",
+      "reason": "Not requested in REQ-1..REQ-5, and the mention of a gradient button conflicts with the requirement to remove heavy gradients across the UI.",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/components/promo/InstallAppBar.tsx with a purple gradient accent button)"
       ]
     }
   ],
   "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/pages/AddMoneyPage.tsx",
+    "frontend/src/components/catalog/ProductCard.tsx",
+    "frontend/src/components/layout/SiteFooter.tsx",
+    "frontend/src/components/navigation/HeaderNav.tsx",
+    "frontend/src/index.css",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

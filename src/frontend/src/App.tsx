@@ -9,6 +9,9 @@ import TopupPage from './pages/TopupPage';
 import ContactUsPage from './pages/ContactUsPage';
 import AdminPanelPage from './pages/admin/AdminPanelPage';
 import IdCodeTopUpPage from './pages/IdCodeTopUpPage';
+import BuyPointsPage from './pages/BuyPointsPage';
+import BuyDiamondsWithPointsPage from './pages/BuyDiamondsWithPointsPage';
+import AdRewardsPage from './pages/AdRewardsPage';
 import AppShell from './components/layout/AppShell';
 import AuthGate from './components/auth/AuthGate';
 import AdminGate from './components/auth/AdminGate';
@@ -73,6 +76,36 @@ const dashboardRoute = createRoute({
   ),
 });
 
+const buyPointsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/buy-points',
+  component: () => (
+    <AuthGate>
+      <BuyPointsPage />
+    </AuthGate>
+  ),
+});
+
+const buyDiamondsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/buy-diamonds',
+  component: () => (
+    <AuthGate>
+      <BuyDiamondsWithPointsPage />
+    </AuthGate>
+  ),
+});
+
+const adRewardsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/ad-rewards',
+  component: () => (
+    <AuthGate>
+      <AdRewardsPage />
+    </AuthGate>
+  ),
+});
+
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin',
@@ -94,6 +127,9 @@ const routeTree = rootRoute.addChildren([
   idCodeTopUpRoute,
   addMoneyRoute,
   dashboardRoute,
+  buyPointsRoute,
+  buyDiamondsRoute,
+  adRewardsRoute,
   adminRoute,
 ]);
 

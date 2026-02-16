@@ -1,12 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Update the Add Money page to show personal payment numbers for bKash and Nagad, add a clear “How to Add Money” instruction box, and refresh styling with payment icons while keeping existing submission and history features unchanged.
+**Goal:** Redesign the A7J TOPUP frontend UI to a clean, professional white + purple theme (#6C5CE7), removing any dark/gaming/gradient-heavy styling while keeping all existing backend behavior unchanged.
 
 **Planned changes:**
-- Update `frontend/src/pages/AddMoneyPage.tsx` to display payment methods with clearly visible, copyable/readable plain-text numbers: bKash Personal **01868226859** and Nagad Personal **01784377956** (English labels).
-- Add a prominent instruction card titled **"How to Add Money"** containing the exact 5 steps provided, plus an **"Important Notice"** section with the exact two bullet points provided.
-- Adjust layout/styling to a white background with clean card layout, rounded corners, soft shadows, and purple primary buttons (using existing styling utilities).
-- Add and render static payment method icons for bKash and Nagad from `frontend/public/assets/generated` and display them next to their respective payment method.
+- Apply a site-wide visual refresh: pure white primary backgrounds, purple (#6C5CE7) accents, clean sans-serif typography, consistent spacing/sizing, rounded corners, and soft shadows; remove heavy gradients and neon/glow effects.
+- Redesign the header/navigation: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), wallet balance display for authenticated users, and a responsive mobile menu.
+- Redesign the Home hero section to be minimal: white background, bold headline, small subtitle, and a single primary “Add Money” CTA that routes to the Add Money flow.
+- Update cards/sections across landing and core pages to use white/light-gray palette with rounded corners and soft shadows (no gradient card backgrounds) while maintaining responsive layouts.
+- Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; ensure responsive layout and English text.
 
-**User-visible outcome:** On the Add Money page, users see bKash and Nagad methods with their personal numbers and icons, can follow the on-page instructions to submit a top-up request, and can still submit transactions and view transaction history as before.
+**User-visible outcome:** The site presents a consistent clean white-and-purple professional UI on mobile and desktop, with an updated responsive header (including wallet balance), a minimal Home hero with an “Add Money” CTA, refreshed card/section styling, and a light professional footer.

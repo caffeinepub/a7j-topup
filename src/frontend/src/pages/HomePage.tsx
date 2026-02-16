@@ -1,12 +1,15 @@
 import ProductCard from '../components/catalog/ProductCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Gift, Star, Gamepad2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Gift, Star, Shield, Zap, ArrowRight } from 'lucide-react';
 import InstallAppBar from '../components/promo/InstallAppBar';
 import { useGetProducts } from '../hooks/useQueries';
+import { useNavigate } from '@tanstack/react-router';
 
 export default function HomePage() {
   const { data: products = [] } = useGetProducts();
+  const navigate = useNavigate();
 
   const freeFireProducts = [
     { name: 'ID Code TopUp (BD)', icon: '/assets/generated/product-icons-sprite.dim_1024x1024.png' },
@@ -19,27 +22,35 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section
-        className="relative py-20 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/assets/generated/hero-bg-light-purple.dim_1920x800.png)' }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/50" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-bold text-gradient-purple mb-4">
-              Fast & Secure Gaming Top-Up
+      {/* Hero Section - Clean & Minimal */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
+              Fast & Secure Top-Up Service
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 mb-8">
-              Get your Free Fire diamonds instantly with our automated delivery system
+            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+              Add money to your wallet and get instant access to gaming top-ups
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Badge className="bg-primary text-white text-base px-4 py-2">
-                <Star className="w-4 h-4 mr-2" />
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg"
+              onClick={() => navigate({ to: '/add-money' })}
+            >
+              Add Money
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <div className="flex flex-wrap justify-center gap-4 mt-8">
+              <Badge variant="secondary" className="text-base px-4 py-2 bg-white border border-border">
+                <Star className="w-4 h-4 mr-2 text-primary" />
                 Instant Delivery
               </Badge>
-              <Badge className="bg-secondary text-secondary-foreground text-base px-4 py-2">
-                <Gamepad2 className="w-4 h-4 mr-2" />
+              <Badge variant="secondary" className="text-base px-4 py-2 bg-white border border-border">
+                <Shield className="w-4 h-4 mr-2 text-primary" />
+                Secure Payment
+              </Badge>
+              <Badge variant="secondary" className="text-base px-4 py-2 bg-white border border-border">
+                <Zap className="w-4 h-4 mr-2 text-primary" />
                 24/7 Support
               </Badge>
             </div>
@@ -49,18 +60,18 @@ export default function HomePage() {
 
       {/* New Offer Section */}
       <section className="py-12 container mx-auto px-4">
-        <Card className="border-primary/20 overflow-hidden shadow-soft bg-gradient-purple-light">
+        <Card className="border-primary/20 overflow-hidden shadow-soft bg-white">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
               <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
                 <Gift className="w-8 h-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold text-gradient-purple">New Offer</CardTitle>
+            <CardTitle className="text-3xl font-bold text-primary">New Offer</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <h3 className="text-2xl font-bold text-primary mb-2">Free 25 Diamond Giveaway</h3>
-            <p className="text-foreground/70 mb-4">
+            <h3 className="text-2xl font-bold text-foreground mb-2">Free 25 Diamond Giveaway</h3>
+            <p className="text-muted-foreground mb-4">
               Join our Telegram channel and get a chance to win 25 diamonds for free!
             </p>
             <Badge className="bg-primary text-white">
@@ -71,11 +82,11 @@ export default function HomePage() {
       </section>
 
       {/* Special Offer Section */}
-      <section className="py-12 bg-muted/30">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-gradient-purple mb-2">
-              Special Offer
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              Special Offers
             </h2>
             <p className="text-muted-foreground">
               Get the best deals on Free Fire diamonds
@@ -98,7 +109,7 @@ export default function HomePage() {
       {/* Free Fire Products Section */}
       <section className="py-12 container mx-auto px-4">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient-purple mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Free Fire Products
           </h2>
           <p className="text-muted-foreground">

@@ -1,56 +1,62 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, Loader2, Copy, Check, AlertCircle } from 'lucide-react';
+import { Wallet, AlertCircle } from 'lucide-react';
 import { useGetCallerBalance, useGetCallerTransactions } from '../hooks/useWallet';
 import { useAddWalletTransaction } from '../hooks/useTransactions';
 import { PaymentMethod } from '../backend';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
+import { PaymentMethodModal } from '../components/payments/PaymentMethodModal';
 
 export default function AddMoneyPage() {
   const { data: balance = BigInt(0) } = useGetCallerBalance();
   const { data: transactions = [] } = useGetCallerTransactions();
   const addTransaction = useAddWalletTransaction();
 
-  const [formData, setFormData] = useState({
-    paymentMethod: '' as PaymentMethod | '',
-    amount: '',
-    transactionId: '',
+  const [modalState, setModalState] = useState<{
+    open: boolean;
+    method: 'bkash' | 'nagad' | null;
+  }>({
+    open: false,
+    method: null,
   });
 
-  const [copiedNumber, setCopiedNumber] = useState<string | null>(null);
-
-  const handleCopyNumber = (number: string, method: string) => {
-    navigator.clipboard.writeText(number);
-    setCopiedNumber(method);
-    toast.success(`${method} number copied!`);
-    setTimeout(() => setCopiedNumber(null), 2000);
+  const openModal = (method: 'bkash' | 'nagad') => {
+    setModalState({ open: true, method });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const closeModal = () => {
+    setModalState({ open: false, method: null });
+  };
 
-    if (!formData.paymentMethod || !formData.amount || !formData.transactionId) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+  const handleModalSubmit = async (amount: string, txId: string) => {
+    if (!modalState.method) return;
+
+    const paymentMethod: PaymentMethod = modalState.method === 'bkash' ? PaymentMethod.bkash : PaymentMethod.nagad;
+    const trimmedTxId = txId.trim();
 
     try {
       await addTransaction.mutateAsync({
-        amount: BigInt(formData.amount),
-        paymentMethod: formData.paymentMethod,
-        transactionId: formData.transactionId,
+        amount: BigInt(amount),
+        paymentMethod,
+        transactionId: trimmedTxId,
       });
-      toast.success('Transaction submitted successfully! Waiting for admin approval.');
-      setFormData({ paymentMethod: '', amount: '', transactionId: '' });
-    } catch (error) {
-      toast.error('Failed to submit transaction. Please try again.');
+      toast.success('Transaction submitted. Admin will verify and add balance.');
+      closeModal();
+    } catch (error: any) {
+      let errorMessage = 'Failed to submit transaction. Please try again.';
+      if (error.message) {
+        if (error.message.includes('already used')) {
+          errorMessage = 'Transaction ID already used. Please enter a different Transaction ID.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      toast.error(errorMessage);
+      throw error;
     }
   };
 
@@ -65,45 +71,63 @@ export default function AddMoneyPage() {
     }
   };
 
+  const phoneNumbers = {
+    bkash: '01868226859',
+    nagad: '01784377956',
+  };
+
   return (
-    <div className="container mx-auto px-4 py-12 bg-white min-h-screen">
+    <div className="container mx-auto px-4 py-8 sm:py-12 bg-white min-h-screen">
       <Toaster />
-      <div className="max-w-4xl mx-auto space-y-8">
+      
+      {/* Modal */}
+      {modalState.method && (
+        <PaymentMethodModal
+          open={modalState.open}
+          onOpenChange={(open) => !open && closeModal()}
+          method={modalState.method}
+          phoneNumber={phoneNumbers[modalState.method]}
+          onSubmit={handleModalSubmit}
+          isSubmitting={addTransaction.isPending}
+        />
+      )}
+
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         <div className="flex items-center gap-2">
-          <Wallet className="w-8 h-8 text-primary" />
-          <h1 className="text-4xl font-bold text-gradient-purple">Add Money</h1>
+          <Wallet className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+          <h1 className="text-3xl sm:text-4xl font-bold text-gradient-purple">Add Money</h1>
         </div>
 
         {/* Wallet Balance */}
         <Card className="bg-primary shadow-soft border-primary/30 rounded-xl">
           <CardHeader>
-            <CardTitle className="text-white">Current Wallet Balance</CardTitle>
+            <CardTitle className="text-white text-lg sm:text-xl">Current Wallet Balance</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-white">৳{balance.toString()}</p>
+            <p className="text-3xl sm:text-4xl font-bold text-white">৳{balance.toString()}</p>
           </CardContent>
         </Card>
 
         {/* How to Add Money Instructions */}
         <Card className="border-primary/30 shadow-soft bg-white rounded-xl">
           <CardHeader>
-            <CardTitle className="text-primary">How to Add Money</CardTitle>
+            <CardTitle className="text-primary text-lg sm:text-xl">How to Add Money</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <ol className="space-y-3 list-decimal list-inside text-foreground">
-              <li className="text-base">Send money to the chosen number (bKash or Nagad)</li>
-              <li className="text-base">Enter the amount</li>
-              <li className="text-base">After payment, enter Transaction ID</li>
-              <li className="text-base">Click Submit</li>
-              <li className="text-base">Admin will verify and add balance</li>
+            <ol className="space-y-2 sm:space-y-3 list-decimal list-inside text-foreground text-sm sm:text-base">
+              <li>Send money to the chosen number (bKash or Nagad)</li>
+              <li>Enter the amount</li>
+              <li>After payment, enter Transaction ID</li>
+              <li>Click Submit</li>
+              <li>Admin will verify and add balance</li>
             </ol>
 
-            <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
               <div className="flex items-start gap-2">
                 <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                 <div className="space-y-2">
-                  <p className="font-semibold text-amber-900">Important Notice:</p>
-                  <ul className="space-y-1 text-sm text-amber-800">
+                  <p className="font-semibold text-amber-900 text-sm sm:text-base">Important Notice:</p>
+                  <ul className="space-y-1 text-xs sm:text-sm text-amber-800">
                     <li>• Balance will be added only after admin approval</li>
                     <li>• Do not send money without submitting transaction ID</li>
                   </ul>
@@ -113,171 +137,94 @@ export default function AddMoneyPage() {
           </CardContent>
         </Card>
 
-        {/* Payment Numbers */}
+        {/* Payment Methods */}
         <Card className="border-primary/30 shadow-soft bg-white rounded-xl">
           <CardHeader>
-            <CardTitle className="text-primary">Payment Numbers</CardTitle>
-            <CardDescription>
-              Send money to one of these numbers
+            <CardTitle className="text-primary text-lg sm:text-xl">Choose Payment Method</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
+              Click on a payment method to proceed
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             {/* bKash */}
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-white border border-pink-200 rounded-lg">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-gradient-to-r from-pink-50 to-white border border-pink-200 rounded-lg">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <img 
                   src="/assets/generated/bkash-icon.dim_128x128.png" 
                   alt="bKash" 
-                  className="w-10 h-10 object-contain"
+                  className="w-10 h-10 sm:w-12 sm:h-12 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">bKash Personal</p>
-                  <p className="text-xl font-bold text-foreground">01868226859</p>
+                  <p className="text-xs sm:text-sm font-medium text-muted-foreground">bKash Personal</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">{phoneNumbers.bkash}</p>
                 </div>
               </div>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleCopyNumber('01868226859', 'bKash')}
-                className="flex items-center gap-2"
+                onClick={() => openModal('bkash')}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold"
               >
-                {copiedNumber === 'bKash' ? (
-                  <Check className="w-4 h-4" />
-                ) : (
-                  <Copy className="w-4 h-4" />
-                )}
-                {copiedNumber === 'bKash' ? 'Copied' : 'Copy'}
+                Pay with bKash
               </Button>
             </div>
 
             {/* Nagad */}
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-white border border-orange-200 rounded-lg">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-gradient-to-r from-orange-50 to-white border border-orange-200 rounded-lg">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <img 
                   src="/assets/generated/nagad-icon.dim_128x128.png" 
                   alt="Nagad" 
-                  className="w-10 h-10 object-contain"
+                  className="w-10 h-10 sm:w-12 sm:h-12 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Nagad Personal</p>
-                  <p className="text-xl font-bold text-foreground">01784377956</p>
+                  <p className="text-xs sm:text-sm font-medium text-muted-foreground">Nagad Personal</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">{phoneNumbers.nagad}</p>
                 </div>
               </div>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleCopyNumber('01784377956', 'Nagad')}
-                className="flex items-center gap-2"
+                onClick={() => openModal('nagad')}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold"
               >
-                {copiedNumber === 'Nagad' ? (
-                  <Check className="w-4 h-4" />
-                ) : (
-                  <Copy className="w-4 h-4" />
-                )}
-                {copiedNumber === 'Nagad' ? 'Copied' : 'Copy'}
+                Pay with Nagad
               </Button>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Add Money Form */}
-        <Card className="border-primary/30 shadow-soft bg-white rounded-xl">
-          <CardHeader>
-            <CardTitle>Submit Transaction Details</CardTitle>
-            <CardDescription>
-              After sending money, enter your transaction details below
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="paymentMethod">Payment Method</Label>
-                <Select
-                  value={formData.paymentMethod}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, paymentMethod: value as PaymentMethod })
-                  }
-                >
-                  <SelectTrigger id="paymentMethod">
-                    <SelectValue placeholder="Select payment method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bkash">bKash</SelectItem>
-                    <SelectItem value="nagad">Nagad</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="amount">Enter Amount (৳)</Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  placeholder="100"
-                  value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  min="1"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="transactionId">Transaction ID</Label>
-                <Input
-                  id="transactionId"
-                  type="text"
-                  placeholder="Enter your transaction ID"
-                  value={formData.transactionId}
-                  onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={addTransaction.isPending}
-                className="w-full btn-purple-gradient"
-              >
-                {addTransaction.isPending ? (
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                ) : null}
-                Submit
-              </Button>
-            </form>
           </CardContent>
         </Card>
 
         {/* Transaction History */}
         <Card className="border-primary/30 shadow-soft bg-white rounded-xl">
           <CardHeader>
-            <CardTitle>Transaction History</CardTitle>
-            <CardDescription>View your wallet top-up requests</CardDescription>
+            <CardTitle className="text-lg sm:text-xl">Transaction History</CardTitle>
+            <CardDescription className="text-sm sm:text-base">View your wallet top-up requests</CardDescription>
           </CardHeader>
           <CardContent>
             {transactions.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">No transactions yet</p>
+              <p className="text-center text-muted-foreground py-8 text-sm sm:text-base">No transactions yet</p>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Transaction ID</TableHead>
-                      <TableHead>Method</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {transactions.map((tx) => (
-                      <TableRow key={tx.id}>
-                        <TableCell className="font-mono text-sm">{tx.transactionId}</TableCell>
-                        <TableCell className="capitalize">{tx.paymentMethod}</TableCell>
-                        <TableCell>৳{tx.amount.toString()}</TableCell>
-                        <TableCell>{getStatusBadge(tx.status)}</TableCell>
+              <div className="overflow-x-auto -mx-2 sm:mx-0">
+                <div className="inline-block min-w-full align-middle">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs sm:text-sm">Transaction ID</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Method</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Amount</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Status</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {transactions.map((tx) => (
+                        <TableRow key={tx.id}>
+                          <TableCell className="font-mono text-xs sm:text-sm max-w-[120px] sm:max-w-none truncate">
+                            {tx.transactionId}
+                          </TableCell>
+                          <TableCell className="capitalize text-xs sm:text-sm">{tx.paymentMethod}</TableCell>
+                          <TableCell className="text-xs sm:text-sm">৳{tx.amount.toString()}</TableCell>
+                          <TableCell>{getStatusBadge(tx.status)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
             )}
           </CardContent>

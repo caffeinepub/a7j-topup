@@ -17,7 +17,7 @@ export function useAddWalletTransaction() {
       transactionId: string;
     }) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.submitWalletTopUpTransaction(amount, paymentMethod, transactionId);
+      return actor.submitAddMoneyTransaction(amount, paymentMethod, transactionId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['callerTransactions'] });

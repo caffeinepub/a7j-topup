@@ -1,81 +1,114 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add Money page: personal payment numbers, instruction card, and payment icons",
+  "title": "A7J TOPUP UI redesign to clean white + purple professional theme",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Show clearly readable A7J TOPUP personal payment numbers for bKash and Nagad on the Add Money page, with copy-friendly presentation in English.",
+      "id": "REQ-1",
+      "summary": "Refresh global styling to a clean, professional white UI with #6C5CE7 purple accents, consistent typography/spacing, rounded corners, and soft shadows; remove dark/arena styling and heavy gradients.",
       "acceptanceCriteria": [
-        "On the Add Money page, both payment methods are shown with their exact numbers: 01868226859 (bKash Personal) and 01784377956 (Nagad Personal).",
-        "The payment numbers are rendered as plain text (not images) and remain readable on mobile and desktop.",
-        "All user-facing labels for these sections are in English."
+        "All primary page backgrounds render as pure white (no dark sections).",
+        "Primary interactive elements (buttons/links/highlights) use #6C5CE7 (or theme token mapped to that value).",
+        "Gradient-heavy utility classes currently used in UI (e.g., hero overlays, gradient text/buttons, gradient card backgrounds) are removed or replaced with solid/very subtle styles.",
+        "Typography is a clean sans-serif site-wide with consistent heading/body scale and spacing.",
+        "Cards/sections use rounded corners and soft shadow; no harsh neon/glow effects.",
+        "All pages remain readable and visually consistent on mobile and desktop."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Add a dedicated 'Payment Numbers' section above the form that displays 'bKash Personal: 01868226859' and 'Nagad Personal: 01784377956' as plain text with clear typography and an optional copy-to-clipboard affordance (keeping labels in English). Use existing shadcn-ui Card layout for readability and consistency; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "summary": "Add a prominent instruction card on the Add Money page with the exact provided English title, steps, and important notice bullets.",
-      "acceptanceCriteria": [
-        "The Add Money page includes an instruction box/card titled 'How to Add Money'.",
-        "The instruction box shows the 5 steps in the same order and wording as provided.",
-        "The instruction box includes an 'Important Notice' section with the 2 bullet points exactly as provided.",
-        "All instruction/notice text is in English and is visually distinct from the form (e.g., separated card with spacing)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AddMoneyPage.tsx",
-          "operation": "modify",
-          "description": "Insert a prominent instruction Card titled 'How to Add Money' containing the exact step list and 'Important Notice' bullet list text provided in the BuildRequest, visually separated from the form via spacing and card styling. Use shadcn-ui Card primitives to keep a clean, professional layout; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "summary": "Refine Add Money page layout/styling to match the requested white background, professional cards, purple buttons, and method icons while preserving existing submission and history behavior.",
-      "acceptanceCriteria": [
-        "The Add Money page background is white and the primary call-to-action button remains purple-styled (consistent with existing purple button utilities).",
-        "Cards on the page have rounded corners and soft shadows (consistent with existing 'shadow-soft' usage).",
-        "bKash and Nagad each display an icon alongside the method name/number (icons load from static frontend assets).",
-        "No changes break submitting a transaction or viewing transaction history (form still validates required fields and submits via existing mutation)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AddMoneyPage.tsx",
-          "operation": "modify",
-          "description": "Adjust layout to a clean card-based structure on a white background: keep existing balance card, keep the form and transaction history functional, and add icon+method presentation for bKash/Nagad near the displayed numbers/method selection. Preserve existing mutation/validation logic and transaction table rendering; use existing Tailwind utilities (e.g., btn-purple-gradient, shadow-soft, rounded corners) and shadcn-ui components already in the page; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "summary": "Add and use static payment icon assets for bKash and Nagad under frontend/public/assets/generated and render them on the Add Money page.",
-      "acceptanceCriteria": [
-        "Two icon files exist under frontend/public/assets/generated with the exact filenames specified in imageRequirements.required.",
-        "The Add Money page renders the icons via standard <img> usage (or equivalent) referencing the static asset paths.",
-        "Icons display crisply at typical UI sizes (e.g., ~24–40px) and do not distort their aspect ratio."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/bkash-icon.dim_128x128.png",
-          "operation": "create",
-          "description": "Add the generated static icon asset for bKash (transparent background) at the exact required path and filename so it can be served directly by the frontend."
+          "description": "Align global theme tokens and base styles to a strict light theme (pure white backgrounds) with purple accent mapped to #6C5CE7, consistent typography defaults, and soft shadow/rounded styling; replace existing gradient helper classes (e.g., text-gradient-purple, btn-purple-gradient, gradient-purple-light) with solid/subtle non-gradient equivalents to prevent heavy gradients across the UI."
         },
         {
-          "path": "frontend/public/assets/generated/nagad-icon.dim_128x128.png",
-          "operation": "create",
-          "description": "Add the generated static icon asset for Nagad (transparent background) at the exact required path and filename so it can be served directly by the frontend."
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Update Tailwind theme extensions to support consistent spacing/typography/shadow utilities for the new clean style (e.g., ensure soft shadow tokens and a consistent sans-serif stack are available) and to reinforce the purple accent usage site-wide."
         },
         {
-          "path": "frontend/src/pages/AddMoneyPage.tsx",
+          "path": "frontend/src/components/catalog/ProductCard.tsx",
           "operation": "modify",
-          "description": "Render the payment method icons via static asset references using standard image rendering (e.g., <img>) alongside each method display, ensuring consistent sizing and preserving aspect ratio for frontend/public/assets/generated/bkash-icon.dim_128x128.png and frontend/public/assets/generated/nagad-icon.dim_128x128.png."
+          "description": "Standardize card styling for product tiles to match the new system (white/light-gray palette, rounded corners, soft shadow, no gradient backgrounds), ensuring responsive behavior remains intact. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Redesign header/navigation with left logo, required nav links, responsive mobile menu, and wallet balance display for authenticated users.",
+      "acceptanceCriteria": [
+        "Desktop header shows the logo on the left and the specified navigation links in the header.",
+        "Mobile header uses a menu/sheet that includes the same navigation links.",
+        "Header displays the caller wallet balance (for authenticated users) and updates when wallet balance changes (via existing wallet query invalidation patterns).",
+        "Navigation labels match exactly: \"Home\", \"Add Money\", \"Buy Points\", \"Topup Diamonds\", \"Earn Points\".",
+        "No gaming-focused tagline remains in the header (replace with neutral/professional wording in English)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/navigation/HeaderNav.tsx",
+          "operation": "modify",
+          "description": "Update header layout and styling to the clean white + purple theme; replace current nav set with the exact required labels and routes (Home, Add Money, Buy Points, Topup Diamonds, Earn Points) and ensure both desktop and mobile menus contain the same set; add a wallet balance display for authenticated users using existing wallet balance query hooks so it stays in sync with react-query invalidation. Continue using existing shadcn-ui primitives (Button/Sheet/DropdownMenu) without editing their sources (frontend/src/components/ui is read-only). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Ensure the overall shell/header area remains consistently white and responsive, and that any legacy dark/gradient styling is removed from the global layout wrapper so the redesigned header renders cleanly across pages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Redesign the Home page hero to a minimal professional white section with headline, subtitle, and a single \"Add Money\" CTA routing to the Add Money flow.",
+      "acceptanceCriteria": [
+        "Hero section has a pure white background (no background image and no large gradient overlays).",
+        "Hero contains a bold headline, a smaller subtitle, and a single primary CTA button labeled \"Add Money\".",
+        "CTA navigates to the Add Money page/route.",
+        "Hero and above-the-fold layout is responsive and looks clean on mobile and desktop.",
+        "Hero copy is in English and avoids gaming-arena tone (no \"Gaming Top-Up\" style messaging)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Replace the current hero (background image + gradient overlays + gaming-themed copy) with a pure white, minimal hero containing an English professional headline/subtitle and a single primary CTA button labeled \"Add Money\" that routes to the existing /add-money flow; remove any hero background images and gradient overlays; ensure responsive spacing/typography. Continue using existing shadcn-ui components (e.g., Button/Card) without editing their sources. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Update card/section styling across landing and core pages to use rounded corners, soft shadows, and light neutral backgrounds without gradient card backgrounds, maintaining responsive layouts.",
+      "acceptanceCriteria": [
+        "Cards/sections (including promotional/offer sections on the Home page) use white/light-gray backgrounds, rounded corners, and soft shadows.",
+        "Gradient-backed cards/sections are replaced with solid or subtle neutral backgrounds.",
+        "Layouts maintain responsiveness (1-column on small screens, multi-column on larger screens where appropriate).",
+        "No sections use dark backgrounds or heavy gradients."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Refactor promotional/offer sections and any remaining gradient-backed areas to use solid white/light-gray cards with rounded corners and soft shadows; keep the existing responsive grid behavior (mobile 1-col, larger multi-col) and remove any gradient utility usage in section headings/cards. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust/replace shared helper classes (e.g., card-lift) and any remaining gradient-related utilities so cards/sections default to subtle shadows and neutral backgrounds without gradient fills."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Redesign the footer to a light gray, responsive, professional layout with contact info, social links, and terms.",
+      "acceptanceCriteria": [
+        "Footer background is light gray (not dark) and contrasts appropriately with white page background.",
+        "Footer includes clearly labeled contact information, social links, and a terms section/link area.",
+        "Footer layout is responsive (stacked on mobile, columns on desktop).",
+        "All user-facing text in the footer is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/SiteFooter.tsx",
+          "operation": "modify",
+          "description": "Redesign footer styling to a light gray background and restructure content into clear sections for Contact information, Social links, and Terms (e.g., Terms of Service/Privacy placeholders), ensuring English copy and responsive stacking/columns on different screen sizes. Continue using existing shadcn-ui primitives (e.g., Separator) without editing their sources. Verify the component's usage instructions before implementing."
         }
       ]
     }

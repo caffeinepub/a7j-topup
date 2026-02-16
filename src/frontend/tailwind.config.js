@@ -15,6 +15,9 @@ export default {
             }
         },
         extend: {
+            fontFamily: {
+                sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif']
+            },
             colors: {
                 border: 'oklch(var(--border))',
                 input: 'oklch(var(--input))',

@@ -1,6 +1,7 @@
 import { SiFacebook, SiX, SiInstagram, SiTelegram } from 'react-icons/si';
 import { Separator } from '@/components/ui/separator';
-import { Heart } from 'lucide-react';
+import { Heart, Mail, Phone } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -9,13 +10,30 @@ export default function SiteFooter() {
   );
 
   return (
-    <footer className="bg-muted/30 border-t border-border mt-auto">
+    <footer className="bg-gray-100 border-t border-border mt-auto">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Stay Connected */}
+          {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-primary">Stay Connected</h3>
-            <div className="flex gap-4">
+            <h3 className="text-lg font-bold mb-4 text-foreground">Contact Us</h3>
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-primary" />
+                <span>+880 1868-226859</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
+                <span>support@a7jtopup.com</span>
+              </div>
+              <p className="font-semibold text-foreground mt-4">Support Hours</p>
+              <p>9:00 AM - 12:00 PM (Daily)</p>
+            </div>
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-4 text-foreground">Follow Us</h3>
+            <div className="flex gap-3">
               <a
                 href="#"
                 className="w-10 h-10 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
@@ -47,36 +65,31 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          {/* Download App */}
+          {/* Terms & Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-primary">Download App</h3>
-            <a href="#" className="inline-block">
-              <img
-                src="/assets/generated/google-play-badge.dim_512x160.png"
-                alt="Get it on Google Play"
-                className="h-12"
-              />
-            </a>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="text-lg font-bold mb-4 text-primary">Support</h3>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p>Telegram Support</p>
-              <p className="font-semibold text-foreground">9:00 AM - 12:00 PM</p>
+            <h3 className="text-lg font-bold mb-4 text-foreground">Legal</h3>
+            <div className="space-y-2 text-sm">
+              <Link to="/" className="block text-muted-foreground hover:text-primary transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="/" className="block text-muted-foreground hover:text-primary transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/" className="block text-muted-foreground hover:text-primary transition-colors">
+                Refund Policy
+              </Link>
             </div>
           </div>
         </div>
 
         <Separator className="my-8" />
 
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center text-sm text-muted-foreground space-y-2">
           <p>
             © {currentYear} A7J TOPUP. All rights reserved.
           </p>
-          <p className="mt-2">
-            Built with <Heart className="inline w-4 h-4 text-primary fill-primary" /> using{' '}
+          <p className="flex items-center justify-center gap-1">
+            Built with <Heart className="w-4 h-4 text-primary fill-primary" /> using{' '}
             <a
               href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appIdentifier}`}
               target="_blank"
