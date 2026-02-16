@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 
 interface PaymentMethodModalProps {
   open: boolean;
@@ -24,24 +24,32 @@ export function PaymentMethodModal({
 }: PaymentMethodModalProps) {
   const [amount, setAmount] = useState('');
   const [txId, setTxId] = useState('');
-  const [error, setError] = useState('');
+  const [amountError, setAmountError] = useState('');
+  const [txIdError, setTxIdError] = useState('');
 
   const methodLabel = method === 'bkash' ? 'bKash' : 'Nagad';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setAmountError('');
+    setTxIdError('');
 
     const trimmedTxId = txId.trim();
     const numAmount = Number(amount);
 
+    let hasError = false;
+
     if (!trimmedTxId) {
-      setError('Transaction ID cannot be empty');
-      return;
+      setTxIdError('Transaction ID cannot be empty');
+      hasError = true;
     }
 
     if (!amount || numAmount <= 0) {
-      setError('Amount must be greater than 0');
+      setAmountError('Amount must be greater than 0');
+      hasError = true;
+    }
+
+    if (hasError) {
       return;
     }
 
@@ -49,50 +57,69 @@ export function PaymentMethodModal({
       await onSubmit(amount, trimmedTxId);
       setAmount('');
       setTxId('');
+      setAmountError('');
+      setTxIdError('');
     } catch (err: any) {
-      // Error is already handled in parent, just keep form open
+      // Error is already handled in parent with toast, just keep form open
     }
   };
 
   const handleClose = () => {
     if (!isSubmitting) {
+      setAmount('');
+      setTxId('');
+      setAmountError('');
+      setTxIdError('');
       onOpenChange(false);
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="bg-white sm:max-w-md max-w-[95vw] mx-auto p-6 rounded-xl">
-        <DialogHeader className="space-y-3">
-          <DialogTitle className="text-2xl font-bold text-primary">
-            {methodLabel} Payment
-          </DialogTitle>
-          <DialogDescription className="text-base text-muted-foreground">
-            Send money to the {methodLabel} number below
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="bg-white sm:max-w-md max-w-[95vw] mx-auto p-0 rounded-2xl shadow-lg max-h-[90vh] overflow-y-auto">
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          disabled={isSubmitting}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground z-10"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
-        <div className="space-y-6 py-4">
+        <div className="p-6 space-y-6">
+          <DialogHeader className="space-y-3">
+            <DialogTitle className="text-2xl font-bold text-primary pr-8">
+              {methodLabel} Payment
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground">
+              Follow the instructions below to complete your payment
+            </DialogDescription>
+          </DialogHeader>
+
           {/* Payment Number Display */}
           <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
             <p className="text-sm font-medium text-muted-foreground mb-1">
-              {methodLabel} Personal Number
+              {methodLabel} Number
             </p>
             <p className="text-2xl font-bold text-primary">{phoneNumber}</p>
           </div>
 
-          {/* Instructions */}
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-sm font-semibold text-amber-900 mb-2">Instructions:</p>
-            <p className="text-sm text-amber-800">
-              Send money, enter amount, enter TxID, click submit
-            </p>
+          {/* Instructions - Ordered List */}
+          <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <p className="text-sm font-semibold text-gray-900 mb-3">Instructions:</p>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
+              <li>Send money to the number</li>
+              <li>Enter amount</li>
+              <li>Enter Transaction ID</li>
+              <li>Click "Submit Transaction"</li>
+            </ol>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="modal-amount" className="text-base">
+              <Label htmlFor="modal-amount" className="text-base font-medium">
                 Amount (৳)
               </Label>
               <Input
@@ -100,16 +127,22 @@ export function PaymentMethodModal({
                 type="number"
                 placeholder="Enter amount"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                  setAmountError('');
+                }}
                 min="1"
                 required
                 disabled={isSubmitting}
                 className="text-base h-11"
               />
+              {amountError && (
+                <p className="text-sm text-red-600">{amountError}</p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="modal-txid" className="text-base">
+              <Label htmlFor="modal-txid" className="text-base font-medium">
                 Transaction ID
               </Label>
               <Input
@@ -117,18 +150,18 @@ export function PaymentMethodModal({
                 type="text"
                 placeholder="Enter transaction ID"
                 value={txId}
-                onChange={(e) => setTxId(e.target.value)}
+                onChange={(e) => {
+                  setTxId(e.target.value);
+                  setTxIdError('');
+                }}
                 required
                 disabled={isSubmitting}
                 className="text-base h-11"
               />
+              {txIdError && (
+                <p className="text-sm text-red-600">{txIdError}</p>
+              )}
             </div>
-
-            {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-800">{error}</p>
-              </div>
-            )}
 
             <Button
               type="submit"

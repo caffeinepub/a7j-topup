@@ -51,6 +51,10 @@ export default function AddMoneyPage() {
       if (error.message) {
         if (error.message.includes('already used')) {
           errorMessage = 'Transaction ID already used. Please enter a different Transaction ID.';
+        } else if (error.message.includes('empty')) {
+          errorMessage = 'Transaction ID cannot be empty.';
+        } else if (error.message.includes('greater than 0')) {
+          errorMessage = 'Amount must be greater than 0.';
         } else {
           errorMessage = error.message;
         }

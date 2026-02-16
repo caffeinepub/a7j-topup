@@ -10,7 +10,7 @@ export function useGetAllTransactions() {
     queryFn: async () => {
       if (!actor) return [];
       const transactions = await actor.getAllWalletTopUpTransactions();
-      // Backend already sorts by createdAt descending, but we ensure it here
+      // Backend already sorts by createdAt descending
       return transactions;
     },
     enabled: !!actor && !isFetching,
@@ -24,7 +24,11 @@ export function useApproveTransaction() {
   return useMutation({
     mutationFn: async (transactionId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.approveWalletTopUpTransaction(transactionId);
+      const result = await actor.approveWalletTopUpTransaction(transactionId);
+      if (!result) {
+        throw new Error('Failed to approve transaction. Transaction may not be pending.');
+      }
+      return result;
     },
     onSuccess: () => {
       // Invalidate both admin and user queries
@@ -42,7 +46,11 @@ export function useRejectTransaction() {
   return useMutation({
     mutationFn: async (transactionId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.rejectWalletTopUpTransaction(transactionId);
+      const result = await actor.rejectWalletTopUpTransaction(transactionId);
+      if (!result) {
+        throw new Error('Failed to reject transaction. Transaction may not be pending.');
+      }
+      return result;
     },
     onSuccess: () => {
       // Invalidate both admin and user queries

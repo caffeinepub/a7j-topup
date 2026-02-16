@@ -1,37 +1,40 @@
+import { ReactNode } from 'react';
 import { useGetCallerUserRole } from '../../hooks/useQueries';
 import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 import { UserRole } from '../../backend';
 import AccessDeniedScreen from './AccessDeniedScreen';
 import ClaimAdminAccessScreen from './ClaimAdminAccessScreen';
-import { Loader2 } from 'lucide-react';
 
 interface AdminGateProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function AdminGate({ children }: AdminGateProps) {
-  const { data: userRole, isLoading } = useGetCallerUserRole();
-  const { identity } = useInternetIdentity();
-  const isAuthenticated = !!identity;
+  const { identity, isInitializing } = useInternetIdentity();
+  const { data: role, isLoading: roleLoading } = useGetCallerUserRole();
 
-  if (isLoading) {
+  // Show loading state while checking authentication and role
+  if (isInitializing || roleLoading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
       </div>
     );
   }
 
-  // If user is admin, show the admin content
-  if (userRole === UserRole.admin) {
-    return <>{children}</>;
+  // Not authenticated - show access denied
+  if (!identity) {
+    return <AccessDeniedScreen />;
   }
 
-  // If user is authenticated but not admin, show the claim admin access screen
-  if (isAuthenticated) {
+  // Authenticated but not admin - show claim admin access screen
+  if (role !== UserRole.admin) {
     return <ClaimAdminAccessScreen />;
   }
 
-  // If user is not authenticated, show access denied
-  return <AccessDeniedScreen />;
+  // Admin user - show admin content
+  return <>{children}</>;
 }

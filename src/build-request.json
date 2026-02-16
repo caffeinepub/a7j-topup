@@ -1,118 +1,149 @@
 {
   "kind": "build_request",
-  "title": "Redesign A7J TOPUP UI with clean white + purple professional theme",
+  "title": "Make Add Money (A7J TOPUP) fully functional with bKash/Nagad modal submission + admin approval",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the global visual theme to a clean professional look: pure white backgrounds, purple accent color #6C5CE7, clean sans-serif typography, consistent sizing/spacing, rounded corners, and soft shadows; remove any dark/gaming/arena styling and heavy gradients across the UI.",
+      "text": "Ensure the Add Money page has two payment method buttons (bKash and Nagad) that open a method-specific popup/modal when clicked.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Redesign A7J TOPUP website with a clean professional theme.\n\nRequirements:\n1. Background: Pure white\n2. Accent color: Purple (#6C5CE7)\n...\n8. Remove all gaming arena style, dark backgrounds, heavy gradients\n9. Fully responsive and mobile friendly"
+          "1️⃣ Payment Buttons:\n- bKash button: When clicked, show popup/modal\n- Nagad button: When clicked, show popup/modal"
         ]
       },
       "acceptanceCriteria": [
-        "All primary page backgrounds render as pure white (no dark sections).",
-        "Primary interactive elements (buttons/links/highlights) use #6C5CE7 (or theme token mapped to that value).",
-        "Gradient-heavy utility classes currently used in UI (e.g., hero overlays, gradient text/buttons, gradient card backgrounds) are removed or replaced with solid/very subtle styles.",
-        "Typography is a clean sans-serif site-wide with consistent heading/body scale and spacing.",
-        "Cards/sections use rounded corners and soft shadow; no harsh neon/glow effects.",
-        "All pages remain readable and visually consistent on mobile and desktop."
+        "On /add-money, clicking “Pay with bKash” opens a modal with bKash details.",
+        "On /add-money, clicking “Pay with Nagad” opens a modal with Nagad details.",
+        "Closing the modal returns the user to the Add Money page without submitting anything."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Redesign the header/navigation to match: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), and a wallet balance display; keep the header fully responsive with a mobile menu.",
+      "text": "Update the payment popup/modal UI to match the requested design: white background clean card, rounded corners, soft shadow, visible close (X) button at the top-right, show the method-specific payment number, and render the instructions as a 4-step ordered list. The primary CTA must be a purple “Submit Transaction” button.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Header:\n   - Logo on left\n   - Navigation links: Home, Add Money, Buy Points, Topup Diamonds, Earn Points\n   - Wallet balance display\n...\n9. Fully responsive and mobile friendly"
+          "2️⃣ Popup/Modal Design:\n- White background, clean card\n- Rounded corners, soft shadow\n- Close (X) button top-right\n- Display payment number:\n   - bKash: 01868226859\n   - Nagad: 01784377956\n- Instructions:\n   1. Send money to the number\n   2. Enter amount\n   3. Enter Transaction ID\n   4. Click \"Submit Transaction\"\n- Purple \"Submit Transaction\" button"
         ]
       },
       "acceptanceCriteria": [
-        "Desktop header shows the logo on the left and the specified navigation links in the header.",
-        "Mobile header uses a menu/sheet that includes the same navigation links.",
-        "Header displays the caller wallet balance (for authenticated users) and updates when wallet balance changes (via existing wallet query invalidation patterns).",
-        "Navigation labels match exactly: \"Home\", \"Add Money\", \"Buy Points\", \"Topup Diamonds\", \"Earn Points\".",
-        "No gaming-focused tagline remains in the header (replace with neutral/professional wording in English)."
+        "Modal surface uses a white background, rounded corners, and a soft shadow (no dark/opaque overlay inside the card).",
+        "A close (X) control is visible in the modal’s top-right corner and closes the modal when clicked.",
+        "When method=bKash, the modal displays payment number 01868226859; when method=Nagad, it displays 01784377956.",
+        "Instructions are displayed as an ordered list with exactly 4 steps (Send money → Enter amount → Enter Transaction ID → Click “Submit Transaction”).",
+        "The submit button label is exactly “Submit Transaction” and uses the app’s purple primary styling.",
+        "Modal layout is mobile responsive (fits small screens without horizontal scrolling)."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Redesign the Home page hero section to be minimal and professional: white background, bold headline, small subtitle, and a clear call-to-action button labeled \"Add Money\" that routes to the Add Money flow.",
-      "target": "frontend",
+      "text": "Implement/verify the Add Money submission flow so that submitting from the modal validates inputs client-side (amount > 0; Transaction ID not empty), calls the backend submit method, and shows an English success/failure message to the user.",
+      "target": "both",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Hero Section:\n   - White background, bold headline, small subtitle\n   - Call-to-action button (Add Money)\n   - Minimal, professional design\n...\n8. Remove all gaming arena style, dark backgrounds, heavy gradients"
+          "3️⃣ Submit Function:\n- Validate Transaction ID (cannot be empty or duplicate)\n- Show success/failure message"
         ]
       },
       "acceptanceCriteria": [
-        "Hero section has a pure white background (no background image and no large gradient overlays).",
-        "Hero contains a bold headline, a smaller subtitle, and a single primary CTA button labeled \"Add Money\".",
-        "CTA navigates to the Add Money page/route.",
-        "Hero and above-the-fold layout is responsive and looks clean on mobile and desktop.",
-        "Hero copy is in English and avoids gaming-arena tone (no \"Gaming Top-Up\" style messaging)."
+        "If Transaction ID is empty/whitespace, the form shows an inline error and does not submit.",
+        "If amount is missing or <= 0, the form shows an inline error and does not submit.",
+        "On successful submission, the user sees a success message in English and the modal closes.",
+        "On failure, the user sees a clear English error message and the modal remains open for correction."
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Update all card/section styling used on landing and core pages to use rounded corners, soft shadows, and a white/light-gray palette (no gradient card backgrounds); ensure spacing and layout remain mobile responsive.",
-      "target": "frontend",
+      "text": "Persist submitted top-up requests in the backend so each request stores: user (Principal), amount, transactionId (TxID), payment method (bKash/Nagad), status (pending by default), and timestamp (createdAt).",
+      "target": "backend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Cards/Sections:\n   - Rounded corners, soft shadows\n   - Mobile responsive layout\n...\n8. Remove all gaming arena style, dark backgrounds, heavy gradients\n9. Fully responsive and mobile friendly"
+          "3️⃣ Submit Function:\n- Save user ID, wallet, amount, TxID, method, timestamp in database"
         ]
       },
       "acceptanceCriteria": [
-        "Cards/sections (including promotional/offer sections on the Home page) use white/light-gray backgrounds, rounded corners, and soft shadows.",
-        "Gradient-backed cards/sections are replaced with solid or subtle neutral backgrounds.",
-        "Layouts maintain responsiveness (1-column on small screens, multi-column on larger screens where appropriate).",
-        "No sections use dark backgrounds or heavy gradients."
+        "A successful submission creates a new pending wallet top-up transaction record keyed by TxID.",
+        "The stored record includes user Principal, amount, paymentMethod, createdAt timestamp, and transactionId.",
+        "The user can see the newly submitted transaction in their Add Money transaction history list after submission (via query refresh)."
       ]
     },
     {
       "id": "REQ-5",
-      "text": "Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; keep it responsive and professional.",
+      "text": "Enforce security rules for wallet top-up requests: prevent duplicate TxID submissions globally, and ensure only admins can approve or reject pending top-up transactions.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "4️⃣ Security:\n- Prevent duplicate TxID submission\n- Only admin can approve transactions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting an already-used TxID fails with an error indicating the Transaction ID is already used.",
+        "Duplicate prevention applies across all callers (not just per-user).",
+        "Non-admin callers cannot approve or reject wallet top-up transactions (backend rejects/traps).",
+        "A transaction cannot be approved/rejected if it is not in pending status."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Ensure the Admin Panel reflects newly submitted pending wallet top-up transactions and can act on them (approve/reject) so admins are effectively notified of pending submissions via the admin transactions list.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "3️⃣ Submit Function:\n- Notify admin panel about pending transaction"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After a user submits a top-up request, the transaction appears in the admin transactions list as Pending (after refresh or automatic query invalidation).",
+        "Admin users can approve a pending transaction; approval updates status to Approved and credits the user wallet balance.",
+        "Admin users can reject a pending transaction; rejection updates status to Rejected and does not credit wallet balance."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Maintain a mobile-responsive, professional UI for the Add Money page and the payment modal (spacing, typography, buttons, and tables must remain usable on small screens).",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Footer:\n   - Light gray background\n   - Contact info, social links, terms"
+          "4️⃣ Security:\n- Mobile responsive and professional design"
         ]
       },
       "acceptanceCriteria": [
-        "Footer background is light gray (not dark) and contrasts appropriately with white page background.",
-        "Footer includes clearly labeled contact information, social links, and a terms section/link area.",
-        "Footer layout is responsive (stacked on mobile, columns on desktop).",
-        "All user-facing text in the footer is in English."
+        "Add Money page content fits on mobile widths without overlapping elements or requiring horizontal scrolling (except the transaction table which may scroll horizontally as needed).",
+        "Buttons are full-width on mobile where appropriate and remain easily tappable.",
+        "Modal content fits within the viewport on common mobile sizes and remains readable."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (read-only UI component sources).",
-    "Do not edit files listed as immutable in SYSTEM_CONTEXT (e.g., frontend/src/main.tsx, frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts).",
-    "Backend behavior and data models must remain unchanged; this request is a UI redesign only."
+    "Backend must remain a single Motoko actor in backend/main.mo; add migration.mo only if state schema changes require it.",
+    "Do not edit files under frontend/src/components/ui or any frontend immutablePaths listed in SYSTEM_CONTEXT; compose with existing components instead.",
+    "Use English for all user-facing text."
   ],
   "nonGoals": [
-    "Implementing or changing wallet/points/diamonds business logic.",
-    "Adding new authentication providers (only Internet Identity is supported).",
-    "Introducing real-time features (WebSockets/push notifications).",
-    "Creating new backend endpoints or changing persistent schema."
+    "Adding third-party payment API integrations (bKash/Nagad API) or automated payment verification.",
+    "Adding real-time notifications (e.g., WebSockets/push) beyond showing pending transactions in the admin list.",
+    "Changing authentication provider (must remain Internet Identity)."
   ],
   "imageRequirements": {
     "required": [],
@@ -121,9 +152,7 @@
   "userProfileUpdate": {
     "goalsToAdd": [],
     "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Use English for user-facing UI text."
-    ],
+    "preferencesToAdd": [],
     "preferencesToRemove": [],
     "miscToAdd": [],
     "miscToRemove": [],

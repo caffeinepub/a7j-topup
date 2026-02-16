@@ -1,91 +1,109 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T13:42:12.401Z",
+  "generatedAt": "2026-02-16T13:59:23.741Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
+    "total": 7,
     "implemented": 5,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the global visual theme to a clean professional look: pure white backgrounds, purple accent color #6C5CE7, clean sans-serif typography, consistent sizing/spacing, rounded corners, and soft shadows; remove any dark/gaming/arena styling and heavy gradients across the UI.",
+        "summary": "Ensure the Add Money page has two payment method buttons (bKash and Nagad) that open a method-specific popup/modal when clicked.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/catalog/ProductCard.tsx"
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/catalog/ProductCard.tsx"
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Redesign the header/navigation to match: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), and a wallet balance display; keep the header fully responsive with a mobile menu.",
+        "summary": "Update the payment popup/modal UI to match the requested design: white background clean card, rounded corners, soft shadow, visible close (X) button at the top-right, show the method-specific payment number, and render the instructions as a 4-step ordered list. The primary CTA must be a purple “Submit Transaction” button.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/navigation/HeaderNav.tsx",
-          "frontend/src/components/layout/AppShell.tsx"
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/navigation/HeaderNav.tsx"
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Redesign the Home page hero section to be minimal and professional: white background, bold headline, small subtitle, and a clear call-to-action button labeled \"Add Money\" that routes to the Add Money flow.",
+        "summary": "Implement/verify the Add Money submission flow so that submitting from the modal validates inputs client-side (amount > 0; Transaction ID not empty), calls the backend submit method, and shows an English success/failure message to the user.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/payments/PaymentMethodModal.tsx",
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/hooks/useTransactions.ts"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
+          "frontend/src/components/payments/PaymentMethodModal.tsx",
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/hooks/useTransactions.ts"
         ]
       },
       {
         "id": "REQ-4",
-        "summary": "Update all card/section styling used on landing and core pages to use rounded corners, soft shadows, and a white/light-gray palette (no gradient card backgrounds); ensure spacing and layout remain mobile responsive.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/index.css"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx",
-          "frontend/src/index.css"
-        ]
+        "summary": "Persist submitted top-up requests in the backend so each request stores: user (Principal), amount, transactionId (TxID), payment method (bKash/Nagad), status (pending by default), and timestamp (createdAt).",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-5",
-        "summary": "Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; keep it responsive and professional.",
+        "summary": "Enforce security rules for wallet top-up requests: prevent duplicate TxID submissions globally, and ensure only admins can approve or reject pending top-up transactions.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Ensure the Admin Panel reflects newly submitted pending wallet top-up transactions and can act on them (approve/reject) so admins are effectively notified of pending submissions via the admin transactions list.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/layout/SiteFooter.tsx"
+          "frontend/src/hooks/useTransactions.ts",
+          "frontend/src/pages/admin/AdminPanelPage.tsx",
+          "frontend/src/components/auth/AdminGate.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/layout/SiteFooter.tsx"
+          "frontend/src/hooks/useTransactions.ts",
+          "frontend/src/components/auth/AdminGate.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Maintain a mobile-responsive, professional UI for the Add Money page and the payment modal (spacing, typography, buttons, and tables must remain usable on small screens).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AddMoneyPage.tsx",
+          "frontend/src/components/payments/PaymentMethodModal.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/catalog/ProductCard.tsx",
-    "frontend/src/components/layout/SiteFooter.tsx",
-    "frontend/src/components/navigation/HeaderNav.tsx",
-    "frontend/src/index.css",
-    "frontend/src/pages/HomePage.tsx",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/auth/AdminGate.tsx",
+    "frontend/src/components/payments/PaymentMethodModal.tsx",
+    "frontend/src/hooks/useAdmin.ts",
+    "frontend/src/hooks/useTransactions.ts",
+    "frontend/src/pages/AddMoneyPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

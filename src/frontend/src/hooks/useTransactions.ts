@@ -20,8 +20,11 @@ export function useAddWalletTransaction() {
       return actor.submitAddMoneyTransaction(amount, paymentMethod, transactionId);
     },
     onSuccess: () => {
+      // Invalidate user queries
       queryClient.invalidateQueries({ queryKey: ['callerTransactions'] });
       queryClient.invalidateQueries({ queryKey: ['callerBalance'] });
+      // Invalidate admin queries so pending transactions appear in admin panel
+      queryClient.invalidateQueries({ queryKey: ['allTransactions'] });
     },
   });
 }

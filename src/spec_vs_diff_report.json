@@ -1,71 +1,81 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T13:42:12.397Z",
-  "summary": "Most of the requested white/purple professional redesign appears implemented in global CSS theme tokens, header nav structure (including specified links + wallet balance), Home hero layout/CTA, updated card styling, and a light-gray footer with contact/social/legal sections. However, the Home hero copy still references “gaming top-ups,” and the diff summary indicates additional auth/routing/admin/business-logic related work and even a gradient button that were not requested in this UI-only redesign.",
+  "generatedAt": "2026-02-16T13:59:23.738Z",
+  "summary": "Frontend implements an Add Money modal flow with client-side validation and query invalidation, but the diff summary does not provide enough evidence that the required backend persistence/uniqueness/security/admin approval methods are implemented. Several unrelated features (points/diamonds/ad rewards/admin dashboard expansions and various UI/global styling updates) appear in the diff without being requested in the BuildRequest.",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Hero copy is in English and avoids gaming-arena tone (no \"Gaming Top-Up\" style messaging).",
-      "reason": "The Home hero subtitle explicitly mentions “gaming top-ups,” which conflicts with the acceptance criteria to avoid gaming-arena/gaming-topup tone.",
+      "id": "REQ-2",
+      "requirement": "The payment modal must include a purple primary CTA button labeled exactly “Submit Transaction”.",
+      "reason": "PaymentMethodModal.tsx is truncated before the form controls/buttons; the diff summary does not show the actual submit button label or styling class usage to confirm it matches exactly.",
       "evidence": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/payments/PaymentMethodModal.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Backend must persist submitted top-up requests keyed by TxID with fields user Principal, amount, paymentMethod, createdAt timestamp, status=pending, and transactionId; and expose data so users can see the submitted transaction in their history.",
+      "reason": "backend/main.mo shows type/state declarations (e.g., walletTopUpTransactions map) but the diff summary does not include any implementation of the submit method or transaction-history query logic that actually writes/reads these records.",
+      "evidence": [
+        "backend/main.mo (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Backend must prevent duplicate TxID submissions globally and restrict approve/reject actions to admins only; approve/reject must only work on pending transactions.",
+      "reason": "Frontend calls submitAddMoneyTransaction/approveWalletTopUpTransaction/rejectWalletTopUpTransaction, but the diff summary does not show backend implementations enforcing global TxID uniqueness, admin checks, or pending-only state transitions.",
+      "evidence": [
+        "backend/main.mo (truncated)",
+        "frontend/src/hooks/useTransactions.ts",
+        "frontend/src/hooks/useAdmin.ts"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Admin Panel must list newly submitted pending wallet top-up transactions and allow admins to approve (credit wallet) or reject (no credit).",
+      "reason": "Hooks reference backend methods (getAllWalletTopUpTransactions/approveWalletTopUpTransaction/rejectWalletTopUpTransaction), but the diff summary does not include backend method implementations or the admin panel UI changes that specifically show the wallet top-up list and actions.",
+      "evidence": [
+        "backend/main.mo (truncated)",
+        "frontend/src/hooks/useAdmin.ts",
+        "frontend-file-summaries.txt (mentions AdminPanelPage changes but does not provide code evidence)"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added/changed authenticated routing and route protection (AuthGate) including new authenticated routes for Buy Points, Buy Diamonds, and Ad Rewards.",
-      "reason": "BuildRequest is a UI redesign only and explicitly states non-goals include changing business logic/behavior; routing/auth gates and new route protection are not requested in REQ-1..REQ-5.",
+      "description": "Points/diamonds/ad-rewards systems and related admin workflows (points requests, conversion settings, ad analytics, diamond purchases) added/expanded beyond the Add Money top-up flow.",
+      "reason": "BuildRequest is specifically about Add Money (wallet top-up) with bKash/Nagad modal submission + admin approval; it explicitly lists non-goals around payment API integrations and does not request broader points/diamonds/ad-rewards features.",
       "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/App.tsx and frontend/src/components/auth/AuthGate.tsx)"
+        "backend/main.mo (adds/contains PointsTransaction, DiamondPurchase, ConversionSettings, PointsPurchaseRequest types/states)",
+        "backend/migration.mo (includes points/diamonds/ad stats state)",
+        "frontend-file-summaries.txt (AdminPanelPage: six tabs including Points Requests/Points/Diamonds/Settings; App.tsx adds routes for Buy Points/Buy Diamonds/Ad Rewards; Dashboard/Home/etc updates)"
       ]
     },
     {
-      "description": "Added/changed admin authorization gating (AdminGate) and access-denied screens, plus claim-admin-access behavior.",
-      "reason": "No requirements mention admin gating/authorization UX changes; this is outside the requested header/home/cards/footer redesign scope.",
+      "description": "Global UI/navigation restyling and additional layout components unrelated to Add Money (e.g., header nav link set changes, footer redesign, install promo bar, global CSS overhaul).",
+      "reason": "BuildRequest focuses on Add Money page/modal and backend/admin approval flow; it does not request an application-wide redesign or new promotional UI elements.",
       "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/components/auth/AdminGate.tsx and frontend/src/components/auth/AccessDeniedScreen.tsx)"
+        "frontend-file-summaries.txt (frontend/src/index.css, HeaderNav.tsx, SiteFooter.tsx, InstallAppBar.tsx, multiple page redesign summaries)"
       ]
     },
     {
-      "description": "Implemented/changed Add Money flow behavior details (TxID uniqueness handling, specific success message, pending wallet transactions history).",
-      "reason": "BuildRequest constraints state backend behavior and data models must remain unchanged and this request is UI redesign only; these are behavioral/flow requirements not requested in REQ-1..REQ-5.",
+      "description": "AdminGate behavior changes introducing ClaimAdminAccessScreen and AccessDeniedScreen flows.",
+      "reason": "BuildRequest does not request changes to admin gating UX, only that non-admins cannot approve/reject top-ups (a backend requirement).",
       "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/pages/AddMoneyPage.tsx behavior and messages)"
-      ]
-    },
-    {
-      "description": "Enhanced user dashboard with balances, quick actions, tabs, and transaction history tables.",
-      "reason": "Not requested by REQ-1..REQ-5 (no dashboard redesign requirement).",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/pages/DashboardPage.tsx)"
-      ]
-    },
-    {
-      "description": "Comprehensive admin panel features (KPI cards, approvals, conversion settings management, ad analytics/profit tracking, multiple tabs).",
-      "reason": "Explicit non-goals include not implementing/changing wallet/points/diamonds logic; admin analytics/settings features are not part of the UI redesign requirements listed.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/pages/admin/AdminPanelPage.tsx)"
-      ]
-    },
-    {
-      "description": "Install app promotional bar with a “purple gradient accent button” and localStorage persistence.",
-      "reason": "Not requested in REQ-1..REQ-5, and the mention of a gradient button conflicts with the requirement to remove heavy gradients across the UI.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/components/promo/InstallAppBar.tsx with a purple gradient accent button)"
+        "frontend/src/components/auth/AdminGate.tsx"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.62,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/catalog/ProductCard.tsx",
-    "frontend/src/components/layout/SiteFooter.tsx",
-    "frontend/src/components/navigation/HeaderNav.tsx",
-    "frontend/src/index.css",
-    "frontend/src/pages/HomePage.tsx",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/auth/AdminGate.tsx",
+    "frontend/src/components/payments/PaymentMethodModal.tsx",
+    "frontend/src/hooks/useAdmin.ts",
+    "frontend/src/hooks/useTransactions.ts",
+    "frontend/src/pages/AddMoneyPage.tsx",
     "project_state.json"
   ]
 }

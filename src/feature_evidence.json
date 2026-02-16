@@ -2,12 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-global-visual-theme-to-a-clean-professional-look-pure-white-backgrounds-purple-accent-color-6c5ce7-clean-sans-serif-typography-consistent-sizing-spacing-rounded-corners-and-soft-shadows-remove-any-dark-gaming-arena-styling-and-heavy-gradients-across-the-ui",
-      "featureTitle": "Update the global visual theme to a clean professional look: pure white backgrounds, purple accent color #6C5CE7, clean sans-serif typography, consistent sizing/spacing, rounded corners, and soft shadows; remove any dark/gaming/arena styling and heavy gradients across the UI.",
+      "featureId": "feature-ensure-the-add-money-page-has-two-payment-method-buttons-bkash-and-nagad-that-open-a-method-specific-popup-modal-when-clicked",
+      "featureTitle": "Ensure the Add Money page has two payment method buttons (bKash and Nagad) that open a method-specific popup/modal when clicked.",
       "files": [
-        "frontend/src/components/catalog/ProductCard.tsx",
-        "frontend/src/index.css",
-        "frontend/tailwind.config.js"
+        "frontend/src/components/payments/PaymentMethodModal.tsx",
+        "frontend/src/pages/AddMoneyPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -23,10 +22,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-redesign-the-header-navigation-to-match-logo-on-the-left-nav-links-home-add-money-buy-points-topup-diamonds-earn-points-and-a-wallet-balance-display-keep-the-header-fully-responsive-with-a-mobile-menu",
-      "featureTitle": "Redesign the header/navigation to match: logo on the left, nav links (Home, Add Money, Buy Points, Topup Diamonds, Earn Points), and a wallet balance display; keep the header fully responsive with a mobile menu.",
+      "featureId": "feature-update-the-payment-popup-modal-ui-to-match-the-requested-design-white-background-clean-card-rounded-corners-soft-shadow-visible-close-x-button-at-the-top-right-show-the-method-specific-payment-number-and-render-the-instructions-as-a-4-step-ordered-list-the-primary-cta-must-be-a-purple-submit-transaction-button",
+      "featureTitle": "Update the payment popup/modal UI to match the requested design: white background clean card, rounded corners, soft shadow, visible close (X) button at the top-right, show the method-specific payment number, and render the instructions as a 4-step ordered list. The primary CTA must be a purple “Submit Transaction” button.",
       "files": [
-        "frontend/src/components/navigation/HeaderNav.tsx"
+        "frontend/src/components/payments/PaymentMethodModal.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -42,10 +41,12 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-redesign-the-home-page-hero-section-to-be-minimal-and-professional-white-background-bold-headline-small-subtitle-and-a-clear-call-to-action-button-labeled-add-money-that-routes-to-the-add-money-flow",
-      "featureTitle": "Redesign the Home page hero section to be minimal and professional: white background, bold headline, small subtitle, and a clear call-to-action button labeled \"Add Money\" that routes to the Add Money flow.",
+      "featureId": "feature-implement-verify-the-add-money-submission-flow-so-that-submitting-from-the-modal-validates-inputs-client-side-amount-0-transaction-id-not-empty-calls-the-backend-submit-method-and-shows-an-english-success-failure-message-to-the-user",
+      "featureTitle": "Implement/verify the Add Money submission flow so that submitting from the modal validates inputs client-side (amount > 0; Transaction ID not empty), calls the backend submit method, and shows an English success/failure message to the user.",
       "files": [
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/payments/PaymentMethodModal.tsx",
+        "frontend/src/hooks/useTransactions.ts",
+        "frontend/src/pages/AddMoneyPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -61,11 +62,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-all-card-section-styling-used-on-landing-and-core-pages-to-use-rounded-corners-soft-shadows-and-a-white-light-gray-palette-no-gradient-card-backgrounds-ensure-spacing-and-layout-remain-mobile-responsive",
-      "featureTitle": "Update all card/section styling used on landing and core pages to use rounded corners, soft shadows, and a white/light-gray palette (no gradient card backgrounds); ensure spacing and layout remain mobile responsive.",
+      "featureId": "feature-ensure-the-admin-panel-reflects-newly-submitted-pending-wallet-top-up-transactions-and-can-act-on-them-approve-reject-so-admins-are-effectively-notified-of-pending-submissions-via-the-admin-transactions-list",
+      "featureTitle": "Ensure the Admin Panel reflects newly submitted pending wallet top-up transactions and can act on them (approve/reject) so admins are effectively notified of pending submissions via the admin transactions list.",
       "files": [
-        "frontend/src/index.css",
-        "frontend/src/pages/HomePage.tsx"
+        "frontend/src/components/auth/AdminGate.tsx",
+        "frontend/src/hooks/useTransactions.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -76,15 +77,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-6"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-redesign-the-footer-to-a-light-gray-background-with-clear-sections-for-contact-info-social-links-and-terms-keep-it-responsive-and-professional",
-      "featureTitle": "Redesign the footer to a light gray background with clear sections for contact info, social links, and terms; keep it responsive and professional.",
+      "featureId": "feature-maintain-a-mobile-responsive-professional-ui-for-the-add-money-page-and-the-payment-modal-spacing-typography-buttons-and-tables-must-remain-usable-on-small-screens",
+      "featureTitle": "Maintain a mobile-responsive, professional UI for the Add Money page and the payment modal (spacing, typography, buttons, and tables must remain usable on small screens).",
       "files": [
-        "frontend/src/components/layout/SiteFooter.tsx"
+        "frontend/src/components/payments/PaymentMethodModal.tsx",
+        "frontend/src/pages/AddMoneyPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -95,7 +97,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-5"
+        "REQ-7"
       ],
       "confidence": "high"
     }

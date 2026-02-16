@@ -11,10 +11,13 @@ import Runtime "mo:core/Runtime";
 import Time "mo:core/Time";
 import Principal "mo:core/Principal";
 import Nat "mo:core/Nat";
+import Migration "migration";
 
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
+// Apply migration on upgrade via with clause
+(with migration = Migration.run)
 actor {
   // Types
   public type ProductOrder = {
